@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./app/assets/images/SealCircle.png" width="300px" alt="EVO Launcher">
+  <img src="C:\Users\HP\OneDrive\Desktop" width="300px" alt="EVO Launcher">
 </p>
 
 <h1 align="center">EVO LAUNCHER</h1>
