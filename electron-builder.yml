@@ -10,7 +10,7 @@ publish:
 copyright: 'Copyright Â© 2024-2026 EVO Launcher'
 
 asar: true
-compression: 'maximum'
+compression: 'normal'
 
 files:
   - '!{dist,.gitignore,.vscode,docs,dev-app-update.yml,.nvmrc,eslint.config.mjs}'
