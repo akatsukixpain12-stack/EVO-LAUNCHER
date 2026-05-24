@@ -2,6 +2,11 @@ appId: 'evolauncher'
 productName: 'EVO Launcher'
 artifactName: '${productName}-setup-${version}.${ext}'
 
+publish:
+  provider: github
+  owner: your-github-username-here
+  repo: your-repository-name-here
+
 copyright: 'Copyright Â© 2024-2026 EVO Launcher'
 
 asar: true

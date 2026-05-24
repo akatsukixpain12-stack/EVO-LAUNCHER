@@ -1,47 +1,33 @@
-name: Build
+name: Build and Release
 
 on:
   push:
-  workflow_dispatch:
+    branches:
+      - master
+    tags:
+      - 'v*'
 
 jobs:
   release:
-    runs-on: ${{ matrix.os }}
-
     permissions:
       contents: write
 
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: windows-latest
 
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v6
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.x
+          node-version: 20
+          cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
-        shell: bash
 
-      - name: Build
+      - name: Build and Publish
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run dist
-        shell: bash
-
-      - name: Upload Installer Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.os }}-dist
-          path: dist/*
-          if-no-files-found: warn
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run dist -- --publish always
