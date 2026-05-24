@@ -30,4 +30,4 @@ jobs:
       - name: Build and Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run dist -- --publish always
+        run: npm run dist -- --publish always -w --x64
