@@ -1,7 +1,9 @@
 /**
- * EVO LAUNCHER — Offline Mode Script
+ * EVO LAUNCHER â€” Offline Mode Script
  * Handles offline login (username only, no auth) and switching back to online mode.
  */
+
+const crypto = require('crypto')
 
 const offlineUsername     = document.getElementById('offlineUsername')
 const offlineLoginButton  = document.getElementById('offlineLoginButton')
@@ -12,7 +14,7 @@ const OFFLINE_USERNAME_KEY = 'evo_offline_username'
 
 /**
  * Validate the offline username.
- * Must be 3–16 characters, alphanumeric + underscore only.
+ * Must be 3â€“16 characters, alphanumeric + underscore only.
  * @param {string} val
  * @returns {boolean}
  */
@@ -39,18 +41,17 @@ offlineUsername.addEventListener('input', () => {
     }
 })
 
-// Login offline — create a fake offline account entry
+// Login offline â€” create a fake offline account entry
 offlineLoginButton.addEventListener('click', () => {
     const username = offlineUsername.value.trim()
     if (!validateOfflineUsername(username)) return
 
     localStorage.setItem(OFFLINE_USERNAME_KEY, username)
 
-    // Generate a deterministic offline UUID (v3-style from username)
+    // Generate a deterministic offline UUID from the username.
     const offlineUUID = generateOfflineUUID(username)
 
-    // Add as a mojang-style offline account
-    ConfigManager.addMojangAuthAccount(offlineUUID, 'offline_token', username, username)
+    ConfigManager.addOfflineAuthAccount(offlineUUID, username)
     ConfigManager.save()
 
     updateSelectedAccount(ConfigManager.getSelectedAccount())
@@ -75,17 +76,11 @@ offlineSwitchOnline.addEventListener('click', () => {
  * @returns {string} UUID string
  */
 function generateOfflineUUID(username) {
-    // Simple deterministic hash → UUID v3 format
-    const str = 'OfflinePlayer:' + username
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-        const chr = str.charCodeAt(i)
-        hash = ((hash << 5) - hash) + chr
-        hash |= 0
-    }
-    // Pad to 32 hex chars
-    const hex = Math.abs(hash).toString(16).padStart(8, '0')
-    const pad = (username.length).toString(16).padStart(8, '0')
-    const full = (hex + pad + hex + pad).substring(0, 32)
-    return `${full.slice(0,8)}-${full.slice(8,12)}-3${full.slice(13,16)}-${full.slice(16,20)}-${full.slice(20,32)}`
+    const hash = crypto.createHash('md5').update(`OfflinePlayer:${username}`, 'utf8').digest()
+
+    hash[6] = (hash[6] & 0x0f) | 0x30
+    hash[8] = (hash[8] & 0x3f) | 0x80
+
+    const hex = hash.toString('hex')
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`
 }

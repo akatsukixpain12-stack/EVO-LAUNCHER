@@ -67,7 +67,7 @@ async function showMainUI(data){
 
     await prepareSettings(true)
 
-    // data may be null if distribution failed to load — handle gracefully
+    // data may be null if distribution failed to load â€” handle gracefully
     if(data) {
         updateSelectedServer(data.getServerById(ConfigManager.getSelectedServer()))
         refreshServerStatus()
@@ -328,8 +328,7 @@ function mergeModConfiguration(o, n, nReq = false){
 async function validateSelectedAccount(){
     const selectedAcc = ConfigManager.getSelectedAccount()
     if(selectedAcc != null){
-        // Skip validation for offline accounts
-        if(selectedAcc.accessToken === 'offline_token') {
+        if(selectedAcc.type === 'offline') {
             return true
         }
         const val = await AuthManager.validateSelected()
@@ -374,6 +373,8 @@ async function validateSelectedAccount(){
                                 selectedAcc.microsoft.refresh_token,
                                 selectedAcc.microsoft.expires_at
                             )
+                        } else if(selectedAcc.type === 'offline') {
+                            ConfigManager.addOfflineAuthAccount(selectedAcc.uuid, selectedAcc.username)
                         } else {
                             ConfigManager.addMojangAuthAccount(selectedAcc.uuid, selectedAcc.accessToken, selectedAcc.username, selectedAcc.displayName)
                         }

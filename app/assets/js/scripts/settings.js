@@ -518,6 +518,15 @@ function processLogOut(val, isLastAccount){
         switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
             ipcRenderer.send(MSFT_OPCODE.OPEN_LOGOUT, uuid, isLastAccount)
         })
+    } else if(targetAcc.type === 'offline') {
+        ConfigManager.removeAuthAccount(uuid)
+        ConfigManager.save()
+        if(!isLastAccount && uuid === prevSelAcc.uuid){
+            const selAcc = ConfigManager.getSelectedAccount()
+            refreshAuthAccountSelected(selAcc.uuid)
+            updateSelectedAccount(selAcc)
+        }
+        prepareAccountsTab()
     } else {
         AuthManager.removeMojangAccount(uuid).then(() => {
             if(!isLastAccount && uuid === prevSelAcc.uuid){
@@ -1584,7 +1593,7 @@ async function prepareSettings(first = false) {
 //prepareSettings(true)
 
 /* ============================================================
-   EVO LAUNCHER — Performance Tab Logic
+   EVO LAUNCHER â€” Performance Tab Logic
    ============================================================ */
 
 /**
@@ -1674,7 +1683,7 @@ function bindPerfToggle(toggleId, statusId, settingKey, sliderRowId = null) {
 }
 
 /**
- * Prepare the Performance tab — bind all toggles, sliders, and presets.
+ * Prepare the Performance tab â€” bind all toggles, sliders, and presets.
  */
 function preparePerformanceTab() {
     const settings = loadPerfSettings()
@@ -1830,4 +1839,3 @@ function getPerfJVMOptions() {
     }
     return presets[settings.fpsBoostPreset] || presets.performance
 }
-

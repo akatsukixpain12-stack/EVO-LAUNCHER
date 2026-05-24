@@ -350,6 +350,26 @@ exports.addMojangAuthAccount = function(uuid, accessToken, username, displayName
 }
 
 /**
+ * Adds an offline account to the database to be stored.
+ *
+ * @param {string} uuid The UUID of the offline account.
+ * @param {string} username The username of the offline account.
+ *
+ * @returns {Object} The authenticated account object created by this action.
+ */
+exports.addOfflineAuthAccount = function(uuid, username){
+    config.selectedAccount = uuid
+    config.authenticationDatabase[uuid] = {
+        type: 'offline',
+        accessToken: '0',
+        username: username.trim(),
+        uuid: uuid.trim(),
+        displayName: username.trim()
+    }
+    return config.authenticationDatabase[uuid]
+}
+
+/**
  * Update the tokens of an authenticated microsoft account.
  * 
  * @param {string} uuid The uuid of the authenticated account.

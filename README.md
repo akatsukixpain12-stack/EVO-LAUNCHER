@@ -1,23 +1,23 @@
 <p align="center">
-  <img src="./app/assets/images/EvoLogo.png" width="300px" alt="EVO Launcher">
+  <img src="./app/assets/images/SealCircle.png" width="300px" alt="EVO Launcher">
 </p>
 
 <h1 align="center">EVO LAUNCHER</h1>
 <h3 align="center">Minecraft Edition</h3>
 
-<p align="center">The next-generation modded Minecraft launcher — built for performance, style, and control.</p>
+<p align="center">The next-generation modded Minecraft launcher â€” built for performance, style, and control.</p>
 
 ---
 
 ## Features
 
-* 🔒 **Full Account Management** — Microsoft (OAuth 2.0) + Mojang authentication. Switch accounts instantly.
-* 📂 **Smart Asset Management** — Auto-downloads and validates all mods and files before launch.
-* ☕ **Automatic Java** — Detects and installs the right Java version for you.
-* ⚡ **Performance Settings** — Motion blur, FPS boost presets, entity culling, fast render, smooth FPS, FPS cap.
-* 📰 **Built-in News Feed** — Stay updated without leaving the launcher.
-* 🔄 **Auto-Updates** — The launcher keeps itself current.
-* 🌐 **Mojang Status Monitor** — Live service status built in.
+* ðŸ”’ **Full Account Management** â€” Microsoft (OAuth 2.0) + Mojang authentication. Switch accounts instantly.
+* ðŸ“‚ **Smart Asset Management** â€” Auto-downloads and validates all mods and files before launch.
+* â˜• **Automatic Java** â€” Detects and installs the right Java version for you.
+* âš¡ **Performance Settings** â€” Motion blur, FPS boost presets, entity culling, fast render, smooth FPS, FPS cap.
+* ðŸ“° **Built-in News Feed** â€” Stay updated without leaving the launcher.
+* ðŸ”„ **Auto-Updates** â€” The launcher keeps itself current.
+* ðŸŒ **Mojang Status Monitor** â€” Live service status built in.
 
 ---
 
@@ -25,26 +25,26 @@
 
 ### Requirements
 
-* [Node.js v22](https://nodejs.org/) — download and install before anything else.
-* [Git](https://git-scm.com/) — needed to clone the repo.
+* [Node.js v22](https://nodejs.org/) â€” download and install before anything else.
+* [Git](https://git-scm.com/) â€” needed to clone the repo.
 * npm (comes with Node.js)
 
 ---
 
-### Step 1 — Clone the repo
+### Step 1 â€” Clone the repo
 
 ```console
 git clone https://github.com/akatsukixpain12-stack/EVO-LAUNCHER.git
 cd EVO-LAUNCHER
 ```
 
-### Step 2 — Install dependencies
+### Step 2 â€” Install dependencies
 
 ```console
 npm install
 ```
 
-### Step 3 — Run in development mode
+### Step 3 â€” Run in development mode
 
 ```console
 npm start
@@ -54,7 +54,7 @@ The launcher window will open. That's it.
 
 ---
 
-### Step 4 — Build an installer (optional)
+### Step 4 â€” Build an installer (optional)
 
 To build a distributable installer for your platform:
 
@@ -86,7 +86,7 @@ Place your logo file at:
 ```
 app/assets/images/EvoLogo.png
 ```
-Also copy it to `build/icon.png` — this is used for the installer icon.
+Also copy it to `build/icon.png` â€” this is used for the installer icon.
 
 ---
 
@@ -100,17 +100,17 @@ Ctrl + Shift + I
 
 ## Performance Tab
 
-Open Settings → **⚡ Performance** to access:
+Open Settings â†’ **âš¡ Performance** to access:
 
 - **Motion Blur** with intensity slider
 - **FPS Boost** with Balanced / Performance / Max FPS presets
-- **Entity Culling** — skip off-screen entities
-- **Fast Render** — reduce GPU overhead
-- **Smooth FPS** — eliminate frame stutters
-- **FPS Cap** — limit max FPS (30–300)
+- **Entity Culling** â€” skip off-screen entities
+- **Fast Render** â€” reduce GPU overhead
+- **Smooth FPS** â€” eliminate frame stutters
+- **FPS Cap** â€” limit max FPS (30â€“300)
 
 ---
 
 ## License
 
-UNLICENSED — All rights reserved © EVO Launcher
+UNLICENSED â€” All rights reserved Â© EVO Launcher
