@@ -1,0 +1,56 @@
+appId: 'evolauncher'
+productName: 'EVO Launcher'
+artifactName: '${productName}-setup-${version}.${ext}'
+
+copyright: 'Copyright Â© 2024-2026 EVO Launcher'
+
+asar: true
+compression: 'maximum'
+
+files:
+  - '!{dist,.gitignore,.vscode,docs,dev-app-update.yml,.nvmrc,eslint.config.mjs}'
+
+extraResources:
+  - 'libraries'
+
+# Windows Configuration
+win:
+  icon: 'app/assets/images/SealCircle.ico'
+  target: 
+    - target: 'nsis'
+      arch: 'x64'
+    - target: 'zip'
+      arch: 'x64'
+
+# Windows Installer Configuration
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+
+# macOS Configuration
+mac:
+  icon: 'app/assets/images/SealCircle.png'
+  target:
+    - target: 'dmg'
+      arch:
+        - 'x64'
+        - 'arm64'
+  artifactName: '${productName}-setup-${version}-${arch}.${ext}'
+  category: 'public.app-category.games'
+
+# Linux Configuration
+linux:
+  icon: 'app/assets/images/SealCircle.png'
+  target: 'AppImage'
+  maintainer: 'EVO Launcher'
+  vendor: 'EVO Launcher'
+  synopsis: 'EVO Launcher â€” Modded Minecraft Launcher'
+  description: 'Custom launcher which allows users to join modded servers. All mods, configurations, and updates are handled automatically.'
+  category: 'Game'
+
+
+directories:
+  buildResources: 'build'
+  output: 'dist'
