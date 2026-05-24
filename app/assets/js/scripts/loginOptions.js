@@ -29,6 +29,19 @@ loginOptionMicrosoft.onclick = (e) => {
 }
 
 loginOptionMojang.onclick = (e) => {
+    loginElyByMode = false
+    switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
+        loginViewOnSuccess = loginOptionsViewOnLoginSuccess
+        loginViewOnCancel = loginOptionsViewOnLoginCancel
+        loginCancelEnabled(true)
+    })
+}
+
+const loginOptionElyBy = document.getElementById('loginOptionElyBy')
+let loginElyByMode = false
+
+loginOptionElyBy.onclick = (e) => {
+    loginElyByMode = true
     switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
         loginViewOnSuccess = loginOptionsViewOnLoginSuccess
         loginViewOnCancel = loginOptionsViewOnLoginCancel

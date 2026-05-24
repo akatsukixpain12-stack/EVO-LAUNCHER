@@ -273,6 +273,44 @@ exports.addMicrosoftAccount = async function(authCode) {
  * @param {string} uuid The UUID of the account to be removed.
  * @returns {Promise.<void>} Promise which resolves to void when the action is complete.
  */
+/**
+ * Add an Ely.by account. This will authenticate the given credentials with Ely.by's
+ * authserver via the main process IPC handler. The resultant data will be stored as
+ * an auth account in the configuration database.
+ * 
+ * @param {string} username The Ely.by account username or email.
+ * @param {string} password The Ely.by account password.
+ * @returns {Promise.<Object>} Promise which resolves the resolved authenticated account object.
+ */
+exports.addElyByAccount = async function(username, password) {
+    try {
+        const { ipcRenderer } = require('electron')
+        const result = await ipcRenderer.invoke('elyby-login', username, password)
+
+        if(result.success) {
+            const ret = ConfigManager.addElyByAuthAccount(
+                result.uuid,
+                result.accessToken,
+                username,
+                result.username
+            )
+            ConfigManager.save()
+            return ret
+        } else {
+            return Promise.reject({
+                title: 'Error During Ely.by Login',
+                desc: result.error?.errorMessage || result.error || 'Authentication failed. Please check your credentials.'
+            })
+        }
+    } catch(err) {
+        log.error(err)
+        return Promise.reject({
+            title: 'Error During Ely.by Login',
+            desc: 'An unknown error occurred. Please try again.'
+        })
+    }
+}
+
 exports.removeMojangAccount = async function(uuid){
     try {
         const authAcc = ConfigManager.getAuthAccount(uuid)
@@ -299,6 +337,23 @@ exports.removeMojangAccount = async function(uuid){
  * @returns {Promise.<void>} Promise which resolves to void when the action is complete.
  */
 exports.removeMicrosoftAccount = async function(uuid){
+    try {
+        ConfigManager.removeAuthAccount(uuid)
+        ConfigManager.save()
+        return Promise.resolve()
+    } catch (err){
+        log.error('Error while removing account', err)
+        return Promise.reject(err)
+    }
+}
+
+/**
+ * Remove an Ely.by account from the database.
+ * 
+ * @param {string} uuid The UUID of the account to be removed.
+ * @returns {Promise.<void>} Promise which resolves to void when the action is complete.
+ */
+exports.removeElyByAccount = async function(uuid){
     try {
         ConfigManager.removeAuthAccount(uuid)
         ConfigManager.save()
@@ -416,7 +471,7 @@ async function validateSelectedMicrosoftAccount(){
 exports.validateSelected = async function(){
     const current = ConfigManager.getSelectedAccount()
 
-    if(current == null || current.type === 'offline'){
+    if(current == null || current.type === 'offline' || current.type === 'elyby'){
         return true
     }
 

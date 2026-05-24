@@ -328,7 +328,7 @@ function mergeModConfiguration(o, n, nReq = false){
 async function validateSelectedAccount(){
     const selectedAcc = ConfigManager.getSelectedAccount()
     if(selectedAcc != null){
-        if(selectedAcc.type === 'offline') {
+        if(selectedAcc.type === 'offline' || selectedAcc.type === 'elyby') {
             return true
         }
         const val = await AuthManager.validateSelected()
@@ -375,6 +375,8 @@ async function validateSelectedAccount(){
                             )
                         } else if(selectedAcc.type === 'offline') {
                             ConfigManager.addOfflineAuthAccount(selectedAcc.uuid, selectedAcc.username)
+                        } else if(selectedAcc.type === 'elyby') {
+                            ConfigManager.addElyByAuthAccount(selectedAcc.uuid, selectedAcc.accessToken, selectedAcc.username, selectedAcc.displayName)
                         } else {
                             ConfigManager.addMojangAuthAccount(selectedAcc.uuid, selectedAcc.accessToken, selectedAcc.username, selectedAcc.displayName)
                         }

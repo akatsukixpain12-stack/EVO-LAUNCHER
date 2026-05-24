@@ -11,7 +11,7 @@
 
 ## Features
 
-* ðŸ”’ **Full Account Management** â€” Microsoft (OAuth 2.0) + Mojang authentication. Switch accounts instantly.
+* ðŸ”’ **Full Account Management** â€” Microsoft (OAuth 2.0), Ely.by, Mojang, and Offline authentication. Switch accounts instantly.
 * ðŸ“‚ **Smart Asset Management** â€” Auto-downloads and validates all mods and files before launch.
 * â˜• **Automatic Java** â€” Detects and installs the right Java version for you.
 * âš¡ **Performance Settings** â€” Motion blur, FPS boost presets, entity culling, fast render, smooth FPS, FPS cap.
