@@ -66,8 +66,13 @@ async function showMainUI(data){
     }
 
     await prepareSettings(true)
-    updateSelectedServer(data.getServerById(ConfigManager.getSelectedServer()))
-    refreshServerStatus()
+
+    // data may be null if distribution failed to load — handle gracefully
+    if(data) {
+        updateSelectedServer(data.getServerById(ConfigManager.getSelectedServer()))
+        refreshServerStatus()
+    }
+
     setTimeout(() => {
         document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
         document.body.style.backgroundImage = `url('assets/images/backgrounds/${document.body.getAttribute('bkid')}.jpg')`
@@ -75,8 +80,6 @@ async function showMainUI(data){
 
         const isLoggedIn = Object.keys(ConfigManager.getAuthAccounts()).length > 0
 
-        // If this is enabled in a development environment we'll get ratelimited.
-        // The relaunch frequency is usually far too high.
         if(!isDev && isLoggedIn){
             validateSelectedAccount()
         }
@@ -99,7 +102,7 @@ async function showMainUI(data){
 
         setTimeout(() => {
             $('#loadingContainer').fadeOut(500, () => {
-                $('#loadSpinnerImage').removeClass('rotating')
+                $('#loadSpinnerImage') && $('#loadSpinnerImage').removeClass('rotating')
             })
         }, 250)
         
@@ -113,17 +116,15 @@ async function showMainUI(data){
 function showFatalStartupError(){
     setTimeout(() => {
         $('#loadingContainer').fadeOut(250, () => {
-            document.getElementById('overlayContainer').style.background = 'none'
-            setOverlayContent(
-                Lang.queryJS('uibinder.startup.fatalErrorTitle'),
-                Lang.queryJS('uibinder.startup.fatalErrorMessage'),
-                Lang.queryJS('uibinder.startup.closeButton')
-            )
-            setOverlayHandler(() => {
-                const window = remote.getCurrentWindow()
-                window.close()
-            })
-            toggleOverlay(true)
+            // Instead of a fatal error, show login options so offline mode still works
+            document.getElementById('frameBar').style.backgroundColor = 'rgba(0, 0, 0, 0.5)'
+            document.body.style.backgroundImage = `url('assets/images/backgrounds/${document.body.getAttribute('bkid')}.jpg')`
+            $('#main').show()
+            loginOptionsCancelEnabled(false)
+            loginOptionsViewOnLoginSuccess = VIEWS.landing
+            loginOptionsViewOnLoginCancel  = VIEWS.loginOptions
+            currentView = VIEWS.loginOptions
+            $(VIEWS.loginOptions).fadeIn(1000)
         })
     }, 750)
 }
@@ -327,6 +328,10 @@ function mergeModConfiguration(o, n, nReq = false){
 async function validateSelectedAccount(){
     const selectedAcc = ConfigManager.getSelectedAccount()
     if(selectedAcc != null){
+        // Skip validation for offline accounts
+        if(selectedAcc.accessToken === 'offline_token') {
+            return true
+        }
         const val = await AuthManager.validateSelected()
         if(!val){
             ConfigManager.removeAuthAccount(selectedAcc.uuid)

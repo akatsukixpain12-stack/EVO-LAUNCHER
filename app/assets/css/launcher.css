@@ -4370,3 +4370,91 @@ input:checked + .toggleSwitchSlider:before {
 .loginOptionOfflineButton svg {
     opacity: 0.7;
 }
+
+
+/* ============================================================
+   EVO LAUNCHER — Custom Loading Screen (replaces Helios)
+   ============================================================ */
+
+#loadingContainer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #0d0d1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+#loadingContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#loadSpinnerContainer {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Spinning outer ring */
+#evoLoadRing {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #4fc3f7;
+    border-right-color: #1565c0;
+    animation: evoSpin 1.2s linear infinite;
+    box-shadow: 0 0 18px rgba(79, 195, 247, 0.4);
+}
+
+#evoLoadRing::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-bottom-color: rgba(79, 195, 247, 0.4);
+    animation: evoSpin 1.8s linear infinite reverse;
+}
+
+@keyframes evoSpin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Center text */
+#evoLoadCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    gap: 2px;
+    z-index: 1;
+}
+
+#evoLoadName {
+    font-family: 'Avenir Heavy', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #4fc3f7, #1565c0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 3px;
+}
+
+#evoLoadSub {
+    font-family: 'Avenir Book', sans-serif;
+    font-size: 8px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
