@@ -187,7 +187,11 @@ loginButton.addEventListener('click', () => {
     // Show loading stuff.
     loginLoading(true)
 
-    AuthManager.addMojangAccount(loginUsername.value, loginPassword.value).then((value) => {
+    const loginPromise = loginElyByMode
+        ? AuthManager.addElyByAccount(loginUsername.value, loginPassword.value)
+        : AuthManager.addMojangAccount(loginUsername.value, loginPassword.value)
+
+    loginPromise.then((value) => {
         updateSelectedAccount(value)
         loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.loggingIn'), Lang.queryJS('login.success'))
         $('.circle-loader').toggleClass('load-complete')
