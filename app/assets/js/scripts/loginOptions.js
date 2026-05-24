@@ -48,3 +48,11 @@ loginOptionsCancelButton.onclick = (e) => {
         }
     })
 }
+
+// Offline mode button
+const loginOptionOffline = document.getElementById('loginOptionOffline')
+if (loginOptionOffline) {
+    loginOptionOffline.onclick = () => {
+        switchView(getCurrentView(), VIEWS.offline, 500, 500)
+    }
+}
