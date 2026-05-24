@@ -1,5 +1,6 @@
 // Requirements
 const os     = require('os')
+const path   = require('path')
 const semver = require('semver')
 
 const DropinModUtil  = require('./assets/js/dropinmodutil')
@@ -897,6 +898,167 @@ function _saveModConfiguration(modConf){
 let CACHE_SETTINGS_MODS_DIR
 let CACHE_DROPIN_MODS
 
+const REMOTE_MOD_EXTENSIONS = new Set(['.jar', '.zip', '.litemod'])
+
+function getServerLoader(serv){
+    const moduleTypes = serv.modules.map(mdl => mdl.rawModule.type)
+    if(moduleTypes.includes(Type.Fabric) || moduleTypes.includes('Fabric')){
+        return 'fabric'
+    }
+    if(moduleTypes.includes('NeoForge') || moduleTypes.includes(Type.NeoForge)){
+        return 'neoforge'
+    }
+    return 'forge'
+}
+
+function parseModrinthProjectSlug(input){
+    const trimmed = input.trim()
+    if(!trimmed){
+        return null
+    }
+    try {
+        const parsed = new URL(trimmed)
+        const parts = parsed.pathname.split('/').filter(Boolean)
+        const modIndex = parts.findIndex(v => v === 'mod' || v === 'plugin' || v === 'datapack' || v === 'resourcepack')
+        if(modIndex !== -1 && parts[modIndex + 1]){
+            return parts[modIndex + 1]
+        }
+    } catch(_err) {
+        return trimmed
+    }
+    return trimmed
+}
+
+async function downloadRemoteMod(url, suggestedName){
+    const response = await fetch(url)
+    if(!response.ok){
+        throw new Error(`HTTP ${response.status}`)
+    }
+
+    const urlPathName = (() => {
+        try {
+            return new URL(response.url).pathname
+        } catch(_err) {
+            return ''
+        }
+    })()
+
+    const fileName = suggestedName || path.basename(urlPathName || new URL(url).pathname)
+    const ext = path.extname(fileName).toLowerCase()
+
+    if(!REMOTE_MOD_EXTENSIONS.has(ext)){
+        throw new Error('unsupported-file-type')
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer())
+    DropinModUtil.writeDropinMod(buffer, fileName, CACHE_SETTINGS_MODS_DIR)
+
+    return fileName
+}
+
+function showDropinImportMessage(title, desc){
+    setOverlayContent(title, desc, Lang.queryJS('settings.dropinMods.okButton'))
+    setOverlayHandler(null)
+    toggleOverlay(true)
+}
+
+async function importFromModrinth(){
+    const input = window.prompt(Lang.queryJS('settings.dropinMods.modrinthPrompt'))
+    if(input == null || !input.trim()){
+        return
+    }
+
+    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+    const loader = getServerLoader(serv)
+    const slug = parseModrinthProjectSlug(input)
+    const params = new URLSearchParams({
+        loaders: JSON.stringify([loader]),
+        game_versions: JSON.stringify([serv.rawServer.minecraftVersion]),
+        featured: 'true',
+        include_changelog: 'false'
+    })
+
+    try {
+        let response = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${params.toString()}`)
+        let versions = await response.json()
+
+        if(!response.ok){
+            throw new Error(`HTTP ${response.status}`)
+        }
+
+        if(!Array.isArray(versions) || versions.length === 0){
+            const fallbackParams = new URLSearchParams({
+                loaders: JSON.stringify([loader]),
+                game_versions: JSON.stringify([serv.rawServer.minecraftVersion]),
+                include_changelog: 'false'
+            })
+            response = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
+            versions = await response.json()
+        }
+
+        if(!Array.isArray(versions) || versions.length === 0){
+            showDropinImportMessage(
+                Lang.queryJS('settings.dropinMods.modrinthNoMatchTitle'),
+                Lang.queryJS('settings.dropinMods.modrinthNoMatchMessage', { gameVersion: serv.rawServer.minecraftVersion, loader })
+            )
+            return
+        }
+
+        const file = versions
+            .flatMap(version => version.files || [])
+            .find(candidate => candidate.primary && REMOTE_MOD_EXTENSIONS.has(path.extname(candidate.filename).toLowerCase()))
+            || versions.flatMap(version => version.files || []).find(candidate => REMOTE_MOD_EXTENSIONS.has(path.extname(candidate.filename).toLowerCase()))
+
+        if(!file?.url || !file?.filename){
+            showDropinImportMessage(
+                Lang.queryJS('settings.dropinMods.modrinthNoMatchTitle'),
+                Lang.queryJS('settings.dropinMods.modrinthNoMatchMessage', { gameVersion: serv.rawServer.minecraftVersion, loader })
+            )
+            return
+        }
+
+        const fileName = await downloadRemoteMod(file.url, file.filename)
+        await reloadDropinMods()
+        showDropinImportMessage(
+            Lang.queryJS('settings.dropinMods.directImportSuccessTitle'),
+            Lang.queryJS('settings.dropinMods.directImportSuccessMessage', { fileName })
+        )
+    } catch(err) {
+        console.error('Modrinth import failed.', err)
+        showDropinImportMessage(
+            Lang.queryJS('settings.dropinMods.modrinthImportFailedTitle'),
+            typeof err?.message === 'string' ? err.message : Lang.queryJS('login.error.unknown').desc
+        )
+    }
+}
+
+async function importFromDirectUrl(){
+    const input = window.prompt(Lang.queryJS('settings.dropinMods.curseForgePrompt'))
+    if(input == null || !input.trim()){
+        return
+    }
+
+    try {
+        const fileName = await downloadRemoteMod(input.trim())
+        await reloadDropinMods()
+        showDropinImportMessage(
+            Lang.queryJS('settings.dropinMods.directImportSuccessTitle'),
+            Lang.queryJS('settings.dropinMods.directImportSuccessMessage', { fileName })
+        )
+    } catch(err) {
+        console.error('Direct mod import failed.', err)
+        const isUnsupportedType = err?.message === 'unsupported-file-type'
+        showDropinImportMessage(
+            isUnsupportedType
+                ? Lang.queryJS('settings.dropinMods.invalidRemoteFileTitle')
+                : Lang.queryJS('settings.dropinMods.directImportFailedTitle'),
+            isUnsupportedType
+                ? Lang.queryJS('settings.dropinMods.invalidRemoteFileMessage')
+                : (typeof err?.message === 'string' ? err.message : Lang.queryJS('login.error.unknown').desc)
+        )
+    }
+}
+
 /**
  * Resolve any located drop-in mods for this server and
  * populate the results onto the UI.
@@ -984,6 +1146,9 @@ function bindDropinModFileSystemButton(){
         DropinModUtil.addDropinMods(e.dataTransfer.files, CACHE_SETTINGS_MODS_DIR)
         await reloadDropinMods()
     }
+
+    document.getElementById('settingsImportModrinthButton').onclick = () => importFromModrinth()
+    document.getElementById('settingsImportCurseForgeButton').onclick = () => importFromDirectUrl()
 }
 
 /**

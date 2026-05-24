@@ -88,6 +88,18 @@ exports.addDropinMods = function(files, modsdir) {
 }
 
 /**
+ * Write a downloaded drop-in mod into the selected mods directory.
+ *
+ * @param {Buffer} buffer The file bytes.
+ * @param {string} fileName The target file name.
+ * @param {string} modsDir The path to the mods directory.
+ */
+exports.writeDropinMod = function(buffer, fileName, modsDir) {
+    exports.validateDir(modsDir)
+    fs.writeFileSync(path.join(modsDir, fileName), buffer)
+}
+
+/**
  * Delete a drop-in mod from the file system.
  * 
  * @param {string} modsDir The path to the mods directory.

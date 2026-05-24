@@ -1800,23 +1800,39 @@ input:checked + .toggleSwitchSlider:before {
     margin-top: 10px;
 }
 
+#settingsDropinActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
 /* Button to open the mods folder for drop-in mods. */
-#settingsDropinFileSystemButton {
+#settingsDropinFileSystemButton,
+#settingsImportModrinthButton,
+#settingsImportCurseForgeButton {
     background: rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(126, 126, 126, 0.57);
     border-radius: 3px;
     height: 50px;
-    width: 100%;
     text-align: left;
-    padding: 0px 50px;
+    padding: 0px 18px;
     cursor: pointer;
     outline: none;
     transition: 0.25s ease;
-    margin-bottom: 10px;
+    color: white;
+}
+#settingsDropinFileSystemButton {
+    width: 100%;
+    padding: 0px 50px;
 }
 #settingsDropinFileSystemButton:hover,
 #settingsDropinFileSystemButton:focus,
-#settingsDropinFileSystemButton[drag] {
+#settingsDropinFileSystemButton[drag],
+#settingsImportModrinthButton:hover,
+#settingsImportModrinthButton:focus,
+#settingsImportCurseForgeButton:hover,
+#settingsImportCurseForgeButton:focus {
     background: rgba(54, 54, 54, 0.25);
     text-shadow: 0px 0px 20px white;
 }
