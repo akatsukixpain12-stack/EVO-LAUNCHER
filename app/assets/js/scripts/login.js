@@ -155,6 +155,7 @@ function formDisabled(v){
 let loginViewOnSuccess = VIEWS.landing
 let loginViewOnCancel = VIEWS.settings
 let loginViewCancelHandler
+let loginViewAuthMode = 'mojang'
 
 function loginCancelEnabled(val){
     if(val){
@@ -187,7 +188,11 @@ loginButton.addEventListener('click', () => {
     // Show loading stuff.
     loginLoading(true)
 
-    AuthManager.addMojangAccount(loginUsername.value, loginPassword.value).then((value) => {
+    const loginPromise = loginViewAuthMode === 'elyby'
+        ? AuthManager.addElyByAccount(loginUsername.value, loginPassword.value)
+        : AuthManager.addMojangAccount(loginUsername.value, loginPassword.value)
+
+    loginPromise.then((value) => {
         updateSelectedAccount(value)
         loginButton.innerHTML = loginButton.innerHTML.replace(Lang.queryJS('login.loggingIn'), Lang.queryJS('login.success'))
         $('.circle-loader').toggleClass('load-complete')

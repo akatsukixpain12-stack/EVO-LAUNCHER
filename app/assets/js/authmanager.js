@@ -167,6 +167,60 @@ exports.addMojangAccount = async function(username, password) {
     }
 }
 
+/**
+ * Add an Ely.by account. This will authenticate the given credentials with Ely.by's
+ * authserver via IPC. The resultant data will be stored as an auth account in the
+ * configuration database.
+ * 
+ * @param {string} username The account username or email.
+ * @param {string} password The account password.
+ * @returns {Promise.<Object>} Promise which resolves the resolved authenticated account object.
+ */
+exports.addElyByAccount = async function(username, password) {
+    try {
+        const { ipcRenderer } = require('electron')
+        const result = await ipcRenderer.invoke('elyby-login', username, password)
+        if(result.success) {
+            const ret = ConfigManager.addElyByAuthAccount(
+                result.uuid,
+                result.accessToken,
+                username,
+                result.username
+            )
+            ConfigManager.save()
+            return ret
+        } else {
+            return Promise.reject({
+                title: Lang.queryJS('auth.elyby.error.loginFailedTitle'),
+                desc: Lang.queryJS('auth.elyby.error.loginFailedDesc')
+            })
+        }
+    } catch (err) {
+        log.error(err)
+        return Promise.reject({
+            title: Lang.queryJS('auth.elyby.error.unknownTitle'),
+            desc: Lang.queryJS('auth.elyby.error.unknownDesc')
+        })
+    }
+}
+
+/**
+ * Remove an Ely.by account from the database.
+ * 
+ * @param {string} uuid The UUID of the account to be removed.
+ * @returns {Promise.<void>} Promise which resolves to void when the action is complete.
+ */
+exports.removeElyByAccount = async function(uuid){
+    try {
+        ConfigManager.removeAuthAccount(uuid)
+        ConfigManager.save()
+        return Promise.resolve()
+    } catch (err){
+        log.error('Error while removing Ely.by account', err)
+        return Promise.reject(err)
+    }
+}
+
 const AUTH_MODE = { FULL: 0, MS_REFRESH: 1, MC_REFRESH: 2 }
 
 /**
@@ -416,7 +470,7 @@ async function validateSelectedMicrosoftAccount(){
 exports.validateSelected = async function(){
     const current = ConfigManager.getSelectedAccount()
 
-    if(current == null || current.type === 'offline'){
+    if(current == null || current.type === 'offline' || current.type === 'elyby'){
         return true
     }
 

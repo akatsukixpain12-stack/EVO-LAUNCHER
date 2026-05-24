@@ -555,6 +555,20 @@ async function dlAsync(login = true) {
         const authUser = ConfigManager.getSelectedAccount()
         loggerLaunchSuite.info(`Sending selected account (${authUser.displayName}) to ProcessBuilder.`)
         let pb = new ProcessBuilder(serv, versionData, modLoaderData, authUser, remote.app.getVersion())
+
+        // Download authlib-injector for Ely.by accounts
+        let authlibInjectorPath = null
+        if(authUser.type === 'elyby'){
+            try {
+                authlibInjectorPath = await pb.ensureAuthlibInjector()
+                loggerLaunchSuite.info('authlib-injector ready at', authlibInjectorPath)
+            } catch(err) {
+                loggerLaunchSuite.error('Failed to download authlib-injector', err)
+                showLaunchFailure('Authlib-Injector Error', 'Failed to download authlib-injector for Ely.by authentication.')
+                return
+            }
+        }
+
         setLaunchDetails(Lang.queryJS('landing.dlAsync.launchingGame'))
 
         // const SERVER_JOINED_REGEX = /\[.+\]: \[CHAT\] [a-zA-Z0-9_]{1,16} joined the game/
@@ -606,7 +620,7 @@ async function dlAsync(login = true) {
 
         try {
             // Build Minecraft process.
-            proc = pb.build()
+            proc = pb.build(authlibInjectorPath)
 
             // Bind listeners to stdout.
             proc.stdout.on('data', tempListener)

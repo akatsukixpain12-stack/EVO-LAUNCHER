@@ -9,7 +9,7 @@ const fs = require('fs')
 const isDev = require('./app/assets/js/isdev')
 const path = require('path')
 const semver = require('semver')
-const axios = require('axios')
+const got = require('got')
 const crypto = require('crypto')
 
 const { pathToFileURL } = require('url')
@@ -99,22 +99,17 @@ ipcMain.handle('elyby-login', async (event, username, password) => {
 
     try {
 
-        const response = await axios.post(
-            'https://authserver.ely.by/auth/authenticate',
-            {
+        const response = await got.post('https://authserver.ely.by/auth/authenticate', {
+            json: {
                 username: username,
                 password: password,
                 clientToken: crypto.randomUUID(),
                 requestUser: true
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        )
+            responseType: 'json'
+        })
 
-        const data = response.data
+        const data = response.body
 
         return {
             success: true,
@@ -127,7 +122,7 @@ ipcMain.handle('elyby-login', async (event, username, password) => {
 
         return {
             success: false,
-            error: err.response?.data || err.message
+            error: err.response?.body || err.message
         }
 
     }

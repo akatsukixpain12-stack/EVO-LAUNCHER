@@ -347,6 +347,7 @@ document.getElementById('settingsAddMojangAccount').onclick = (e) => {
     switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
         loginViewOnCancel = VIEWS.settings
         loginViewOnSuccess = VIEWS.settings
+        loginViewAuthMode = 'mojang'
         loginCancelEnabled(true)
     })
 }
@@ -355,6 +356,16 @@ document.getElementById('settingsAddMojangAccount').onclick = (e) => {
 document.getElementById('settingsAddMicrosoftAccount').onclick = (e) => {
     switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
         ipcRenderer.send(MSFT_OPCODE.OPEN_LOGIN, VIEWS.settings, VIEWS.settings)
+    })
+}
+
+// Bind the add Ely.by account button.
+document.getElementById('settingsAddElyByAccount').onclick = (e) => {
+    switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
+        loginViewOnCancel = VIEWS.settings
+        loginViewOnSuccess = VIEWS.settings
+        loginViewAuthMode = 'elyby'
+        loginCancelEnabled(true)
     })
 }
 
@@ -518,15 +529,27 @@ function processLogOut(val, isLastAccount){
         switchView(getCurrentView(), VIEWS.waiting, 500, 500, () => {
             ipcRenderer.send(MSFT_OPCODE.OPEN_LOGOUT, uuid, isLastAccount)
         })
-    } else if(targetAcc.type === 'offline') {
-        ConfigManager.removeAuthAccount(uuid)
-        ConfigManager.save()
+    } else if(targetAcc.type === 'offline' || targetAcc.type === 'elyby') {
+        if(targetAcc.type === 'elyby') {
+            AuthManager.removeElyByAccount(uuid)
+        } else {
+            ConfigManager.removeAuthAccount(uuid)
+            ConfigManager.save()
+        }
         if(!isLastAccount && uuid === prevSelAcc.uuid){
             const selAcc = ConfigManager.getSelectedAccount()
             refreshAuthAccountSelected(selAcc.uuid)
             updateSelectedAccount(selAcc)
         }
-        prepareAccountsTab()
+        if(isLastAccount) {
+            loginOptionsCancelEnabled(false)
+            loginOptionsViewOnLoginSuccess = VIEWS.settings
+            loginOptionsViewOnLoginCancel = VIEWS.loginOptions
+            switchView(getCurrentView(), VIEWS.loginOptions)
+        }
+        $(parent).fadeOut(250, () => {
+            parent.remove()
+        })
     } else {
         AuthManager.removeMojangAccount(uuid).then(() => {
             if(!isLastAccount && uuid === prevSelAcc.uuid){
@@ -629,6 +652,7 @@ function refreshAuthAccountSelected(uuid){
 
 const settingsCurrentMicrosoftAccounts = document.getElementById('settingsCurrentMicrosoftAccounts')
 const settingsCurrentMojangAccounts = document.getElementById('settingsCurrentMojangAccounts')
+const settingsCurrentElyByAccounts = document.getElementById('settingsCurrentElyByAccounts')
 
 /**
  * Add auth account elements for each one stored in the authentication database.
@@ -643,6 +667,7 @@ function populateAuthAccounts(){
 
     let microsoftAuthAccountStr = ''
     let mojangAuthAccountStr = ''
+    let elybyAuthAccountStr = ''
 
     authKeys.forEach((val) => {
         const acc = authAccounts[val]
@@ -673,6 +698,8 @@ function populateAuthAccounts(){
 
         if(acc.type === 'microsoft') {
             microsoftAuthAccountStr += accHtml
+        } else if(acc.type === 'elyby') {
+            elybyAuthAccountStr += accHtml
         } else {
             mojangAuthAccountStr += accHtml
         }
@@ -681,6 +708,7 @@ function populateAuthAccounts(){
 
     settingsCurrentMicrosoftAccounts.innerHTML = microsoftAuthAccountStr
     settingsCurrentMojangAccounts.innerHTML = mojangAuthAccountStr
+    settingsCurrentElyByAccounts.innerHTML = elybyAuthAccountStr
 }
 
 /**
