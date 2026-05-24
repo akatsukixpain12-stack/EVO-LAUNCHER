@@ -290,6 +290,8 @@ function createWindow() {
 
         width: 980,
         height: 552,
+        minWidth: 400, // Better for small/mobile-style windows
+        minHeight: 300,
         frame: false,
 
         webPreferences: {

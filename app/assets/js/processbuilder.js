@@ -73,9 +73,15 @@ class ProcessBuilder {
 
         // Hide access token
         const loggableArgs = [...args]
-        loggableArgs[loggableArgs.findIndex(x => x === this.authUser.accessToken)] = '**********'
+        if (this.authUser.type !== 'offline') {
+            loggableArgs[loggableArgs.findIndex(x => x === this.authUser.accessToken)] = '**********'
+        }
 
         logger.info('Launch Arguments:', loggableArgs)
+
+        if (this.authUser.type === 'offline') {
+            logger.info('\nBooting Minecraft Cracked Edition. Happy offline gaming!')
+        }
 
         const child = child_process.spawn(ConfigManager.getJavaExecutable(this.server.rawServer.id), args, {
             cwd: this.gameDir,
@@ -507,13 +513,13 @@ class ProcessBuilder {
                             val = this.authUser.uuid.trim()
                             break
                         case 'auth_access_token':
-                            val = this.authUser.type === 'offline' ? '0' : this.authUser.accessToken
+                            val = this.authUser.accessToken
                             break
                         case 'user_type':
                             val = this.authUser.type === 'microsoft'
                                 ? 'msa'
                                 : this.authUser.type === 'offline'
-                                    ? 'legacy'
+                                    ? 'mojang' // Modern versions prefer 'mojang' or 'msa'
                                     : this.authUser.type === 'elyby'
                                         ? 'mojang'
                                         : 'mojang'
@@ -604,13 +610,13 @@ class ProcessBuilder {
                         val = this.authUser.uuid.trim()
                         break
                     case 'auth_access_token':
-                        val = this.authUser.type === 'offline' ? '0' : this.authUser.accessToken
+                        val = this.authUser.accessToken
                         break
                     case 'user_type':
                         val = this.authUser.type === 'microsoft'
                             ? 'msa'
                             : this.authUser.type === 'offline'
-                                ? 'legacy'
+                                ? 'legacy' // Older versions require 'legacy' for offline
                                 : this.authUser.type === 'elyby'
                                     ? 'mojang'
                                     : 'mojang'
