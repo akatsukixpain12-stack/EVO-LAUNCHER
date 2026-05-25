@@ -1012,9 +1012,7 @@ async function loadNews(){
                         }
                     )
                 }
-                resolve({
-                    articles
-                })
+                return { articles }
             })
             .catch(err => {
                 loggerLanding.error('Failed to load news feed', err)
