@@ -1,6 +1,6 @@
 appId: 'evolauncher'
-productName: 'EVO Launcher'
-artifactName: '${productName}-Installer-${version}.${ext}'
+productName: 'EVO LAUNCHER'
+artifactName: 'EVO-Launcher-Setup-${version}.${ext}'
 
 publish:
   provider: github
@@ -21,18 +21,23 @@ extraResources:
 # Windows Configuration
 win:
   icon: 'app/assets/images/SealCircle.ico'
+  publisherName: 'EVO Launcher Team'
+  legalCopyright: 'Copyright © 2024-2026 EVO Launcher'
   target: 
     - target: 'nsis'
-      arch: 'x64'
-    - target: 'zip'
       arch: 'x64'
 
 # Windows Installer Configuration
 nsis:
   oneClick: false
-  perMachine: false
+  perMachine: true
   allowElevation: true
   allowToChangeInstallationDirectory: true
+  installerIcon: 'app/assets/images/SealCircle.ico'
+  uninstallerIcon: 'app/assets/images/SealCircle.ico'
+  uninstallDisplayName: 'EVO LAUNCHER'
+  runAfterFinish: true
+  createDesktopShortcut: true
 
 # macOS Configuration
 mac:

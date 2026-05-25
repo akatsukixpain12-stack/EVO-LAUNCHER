@@ -2,12 +2,16 @@
   <img src="app/assets/images/EvoLogo.png" width="250px" alt="EVO Launcher">
 </p>
 
-<h1 align="center">EVO LAUNCHER</h1>
-<h3 align="center">Minecraft Edition</h3>
+<p align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=35&pause=1000&color=0078D4&center=true&vCenter=true&width=435&lines=EVO+LAUNCHER;MINECRAFT+EDITION" alt="Typing SVG" />
+</p>
 
 <p align="center">
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest/download/EVO-Launcher-Setup-2.2.1.exe">
+    <img src="https://img.shields.io/badge/DOWNLOAD-EXE-0078D4?style=for-the-badge&logo=windows&logoColor=white" height="45">
+  </a>
   <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest">
-    <img src="https://img.shields.io/badge/Download-Windows_Installer-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Download for Windows">
+    <img src="https://img.shields.io/badge/ALL-RELEASES-grey?style=for-the-badge&logo=github" height="45">
   </a>
 </p>
 
