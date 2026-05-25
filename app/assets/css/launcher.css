@@ -4772,7 +4772,7 @@ input:checked + .toggleSwitchSlider:before {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: radial-gradient(ellipse at center bottom, #1a1020 0%, #0d0d1a 60%, #0a0a14 100%);
+    background: radial-gradient(ellipse at center, #111827 0%, #0a0e1a 60%, #060810 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4790,76 +4790,65 @@ input:checked + .toggleSwitchSlider:before {
 
 #loadSpinnerContainer {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 160px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* App icon glow */
+/* Spinning ring */
 #evoLoadRing {
     position: absolute;
     inset: 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #ff6432, #ff8a50);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 40px rgba(255, 100, 50, 0.3), 0 0 80px rgba(255, 100, 50, 0.1);
-    animation: evoGlow 2s ease-in-out infinite alternate;
+    border-radius: 50%;
+    border: 2px solid rgba(80, 160, 255, 0.15);
+    animation: evoRingSpin 2.5s linear infinite;
 }
 
 #evoLoadRing::before {
-    content: 'EVO';
-    font-family: 'Avenir Medium', sans-serif;
-    font-size: 24px;
-    font-weight: 900;
-    color: white;
-    letter-spacing: 2px;
-}
-
-@keyframes evoGlow {
-    0%   { box-shadow: 0 0 30px rgba(255, 100, 50, 0.2), 0 0 60px rgba(255, 100, 50, 0.05); }
-    100% { box-shadow: 0 0 50px rgba(255, 100, 50, 0.4), 0 0 100px rgba(255, 100, 50, 0.15); }
-}
-
-/* Loading spinner */
-#evoLoadCenter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    z-index: 1;
-}
-
-#evoLoadCenter::before {
     content: '';
-    width: 24px;
-    height: 24px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-top-color: #ff6432;
+    position: absolute;
+    top: -2px; left: -2px;
+    right: -2px; bottom: -2px;
     border-radius: 50%;
-    animation: evoSpin 0.8s linear infinite;
+    border: 2px solid transparent;
+    border-top-color: #4a9eff;
+    filter: drop-shadow(0 0 8px rgba(74, 158, 255, 0.6));
 }
 
-@keyframes evoSpin {
+@keyframes evoRingSpin {
     0%   { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
+/* Center circle with text */
+#evoLoadCenter {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #141a2e 0%, #0d1020 100%);
+    border: 1px solid rgba(80, 160, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    z-index: 1;
+}
+
 #evoLoadName {
-    font-family: 'Avenir Medium', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 1px;
+    font-family: 'Avenir Heavy', 'Avenir Medium', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #4a9eff;
+    letter-spacing: 3px;
 }
 
 #evoLoadSub {
     font-family: 'Avenir Book', sans-serif;
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.5px;
+    font-size: 9px;
+    color: rgba(74, 158, 255, 0.5);
+    letter-spacing: 4px;
 }
