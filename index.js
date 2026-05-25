@@ -9,7 +9,7 @@ const fs = require('fs')
 const isDev = require('./app/assets/js/isdev')
 const path = require('path')
 const semver = require('semver')
-const axios = require('axios')
+const got = require('got')
 const crypto = require('crypto')
 
 const { pathToFileURL } = require('url')
@@ -95,26 +95,41 @@ ipcMain.on('autoUpdateAction', (event, arg, data) => {
 
 // ==================== ELY.BY LOGIN ====================
 
+async function postJson(url, json) {
+
+    try {
+
+        return await got.post(url, {
+            json,
+            responseType: 'json'
+        }).json()
+
+    } catch(err) {
+
+        const errorBody = err.response?.body
+
+        throw new Error(
+            typeof errorBody === 'string'
+                ? errorBody
+                : JSON.stringify(errorBody || err.message)
+        )
+
+    }
+}
+
 ipcMain.handle('elyby-login', async (event, username, password) => {
 
     try {
 
-        const response = await axios.post(
+        const data = await postJson(
             'https://authserver.ely.by/auth/authenticate',
             {
                 username: username,
                 password: password,
                 clientToken: crypto.randomUUID(),
                 requestUser: true
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             }
         )
-
-        const data = response.data
 
         return {
             success: true,
@@ -127,7 +142,7 @@ ipcMain.handle('elyby-login', async (event, username, password) => {
 
         return {
             success: false,
-            error: err.response?.data || err.message
+            error: err.message
         }
 
     }
@@ -138,21 +153,14 @@ ipcMain.handle('elyby-refresh', async (event, accessToken, clientToken) => {
 
     try {
 
-        const response = await axios.post(
+        const data = await postJson(
             'https://authserver.ely.by/auth/refresh',
             {
                 accessToken,
                 clientToken,
                 requestUser: true
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             }
         )
-
-        const data = response.data
 
         return {
             success: true,
@@ -165,7 +173,7 @@ ipcMain.handle('elyby-refresh', async (event, accessToken, clientToken) => {
 
         return {
             success: false,
-            error: err.response?.data || err.message
+            error: err.message
         }
 
     }
@@ -176,16 +184,11 @@ ipcMain.handle('elyby-invalidate', async (event, accessToken, clientToken) => {
 
     try {
 
-        await axios.post(
+        await postJson(
             'https://authserver.ely.by/auth/invalidate',
             {
                 accessToken,
                 clientToken
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             }
         )
 
@@ -197,7 +200,7 @@ ipcMain.handle('elyby-invalidate', async (event, accessToken, clientToken) => {
 
         return {
             success: false,
-            error: err.response?.data || err.message
+            error: err.message
         }
 
     }
