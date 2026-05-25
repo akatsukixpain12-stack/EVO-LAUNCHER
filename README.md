@@ -7,11 +7,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest/download/EVO-Launcher-Setup-2.2.1.exe">
-    <img src="https://img.shields.io/badge/DOWNLOAD-EXE-0078D4?style=for-the-badge&logo=windows&logoColor=white" height="45">
-  </a>
   <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest">
     <img src="https://img.shields.io/badge/ALL-RELEASES-grey?style=for-the-badge&logo=github" height="45">
+  </a>
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest">
+    <img src="https://img.shields.io/badge/MOBILE-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" height="45">
   </a>
 </p>
 

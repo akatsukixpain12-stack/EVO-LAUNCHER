@@ -7,7 +7,7 @@ publish:
   owner: akatsukixpain12-stack
   repo: EVO-LAUNCHER
 
-copyright: 'Copyright Â© 2024-2026 EVO Launcher'
+copyright: 'Copyright © 2024-2026 EVO Launcher'
 
 asar: true
 compression: 'normal'
