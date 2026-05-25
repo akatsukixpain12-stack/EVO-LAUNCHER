@@ -997,7 +997,8 @@ async function importFromModrinth(){
 
     try {
         let res = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${params.toString()}`)
-        let versions = await res.json()
+        if (!res.ok) throw new Error(`Modrinth API error: ${res.status}`)
+        let versions = await (res.headers.get('content-type')?.includes('application/json') ? res.json() : res.text())
 
         if(!Array.isArray(versions) || versions.length === 0){
             const fallbackParams = new URLSearchParams({
@@ -1006,7 +1007,8 @@ async function importFromModrinth(){
                 include_changelog: 'false'
             })
             res = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
-            versions = await res.json()
+            if (!res.ok) throw new Error(`Modrinth API error: ${res.status}`)
+            versions = await (res.headers.get('content-type')?.includes('application/json') ? res.json() : res.text())
         }
 
         if(!Array.isArray(versions) || versions.length === 0){
@@ -1680,7 +1682,10 @@ function populateReleaseNotes(){
     const timeoutId = setTimeout(() => controller.abort(), 2500)
 
     fetch('https://github.com/dscalzi/HeliosLauncher/releases.atom', { signal: controller.signal })
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+            return response.text()
+        })
         .then(data => {
             clearTimeout(timeoutId)
             const version = 'v' + remote.app.getVersion()

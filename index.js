@@ -101,7 +101,8 @@ async function postJson(url, json) {
         body: JSON.stringify(json)
     })
 
-    const data = await response.json()
+    const isJson = response.headers.get('content-type')?.includes('application/json')
+    const data = isJson ? await response.json() : await response.text()
 
     if (!response.ok) {
         throw new Error(typeof data === 'string' ? data : JSON.stringify(data))
