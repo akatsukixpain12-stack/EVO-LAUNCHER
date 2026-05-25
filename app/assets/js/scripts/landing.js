@@ -977,7 +977,8 @@ async function loadNews(){
         })
         .then(data => {
             clearTimeout(timeoutId)
-                const items = $(data).find('item')
+                const xml = $.parseXML(data)
+                const items = $(xml).find('item')
                 const articles = []
 
                 for(let i=0; i<items.length; i++){
