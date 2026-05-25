@@ -86,6 +86,7 @@ The output will be in the `dist/` folder.
 | Windows x64 | `dist/EVO Launcher-setup-2.2.1.exe` |
 | macOS x64 | `dist/EVO Launcher-setup-2.2.1-x64.dmg` |
 | macOS arm64 | `dist/EVO Launcher-setup-2.2.1-arm64.dmg` |
+| Android APK | `dist/EVO-Launcher-v2.2.1.apk` |
 | Linux x64 | `dist/EVO Launcher-setup-2.2.1.AppImage` |
 
 ---

@@ -428,6 +428,16 @@ function setSelectedAccount(uuid){
     validateSelectedAccount()
 }
 
+/**
+ * Detect if the application is running on a mobile device
+ * and apply mobile-specific UI scaling/changes.
+ */
+function initMobileUI(){
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768){
+        document.body.classList.add('mobile-ui')
+    }
+}
+
 // Synchronous Listener
 document.addEventListener('readystatechange', async () => {
 
@@ -435,6 +445,7 @@ document.addEventListener('readystatechange', async () => {
         if(rscShouldLoad){
             rscShouldLoad = false
             if(!fatalStartupError){
+                initMobileUI()
                 const data = await DistroAPI.getDistribution()
                 await showMainUI(data)
             } else {
