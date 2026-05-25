@@ -1,38 +1,44 @@
 <p align="center">
-  <img src="app/assets/images/SealCircle.png" width="150px" alt="EVO Launcher">
+  <img src="app/assets/images/SealCircle.png" width="150px" alt="EVO LAUNCHER">
 </p>
 
 <h1 align="center">EVO LAUNCHER</h1>
-<h3 align="center">Minecraft Edition</h3>
 
-<p align="center">The next-generation modded Minecraft launcher — built for performance, style, and control.</p>
+<p align="center">Free, open-source Minecraft launcher with Microsoft, Ely.by, and Offline authentication.<br>Modern dark UI, built-in mod management, and FPS optimization.</p>
+
+<p align="center">
+  <a href="https://akatsukixpain12-stack.github.io/EVO-LAUNCHER/">Website</a> •
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases">Download</a> •
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/issues">Issues</a>
+</p>
 
 ---
 
 ## Download
 
-Download the latest installer from the [Releases](https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases) page:
+Download the latest installer from the [Releases](https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases) page or visit the [website](https://akatsukixpain12-stack.github.io/EVO-LAUNCHER/):
 
 | Platform | File |
 | -------- | ---- |
-| Windows x64 | `EVO Launcher-setup-X.X.X.exe` |
-| macOS x64 | `EVO Launcher-setup-X.X.X-x64.dmg` |
-| macOS arm64 | `EVO Launcher-setup-X.X.X-arm64.dmg` |
-| Linux x64 | `EVO Launcher-setup-X.X.X.AppImage` |
+| Windows x64 | `EVO LAUNCHER-setup-X.X.X.exe` |
+| macOS x64 | `EVO LAUNCHER-setup-X.X.X-x64.dmg` |
+| macOS arm64 | `EVO LAUNCHER-setup-X.X.X-arm64.dmg` |
+| Linux x64 | `EVO LAUNCHER-setup-X.X.X.AppImage` |
 
 ---
 
 ## Features
 
-* **Full Account Management** — Microsoft (OAuth 2.0), Mojang, Ely.by, and Offline authentication. Switch accounts instantly.
-* **Ely.by Authentication** — Play using your free Ely.by account with full skin support via authlib-injector.
-* **Offline Mode** — Play without any account using a local username.
-* **Smart Asset Management** — Auto-downloads and validates all mods and files before launch.
-* **Automatic Java** — Detects and installs the right Java version for you.
-* **Performance Settings** — Motion blur, FPS boost presets, entity culling, fast render, smooth FPS, FPS cap.
-* **Built-in News Feed** — Stay updated without leaving the launcher.
-* **Auto-Updates** — The launcher keeps itself current.
-* **Mojang Status Monitor** — Live service status built in.
+* **4 Authentication Methods** — Microsoft (OAuth 2.0), Mojang, Ely.by (free), and Offline mode
+* **Ely.by Authentication** — Play using your free Ely.by account with full skin support via authlib-injector
+* **Offline Mode** — Play without any account using a local username
+* **Modern Dark UI** — FastClient-inspired dark theme with orange accent colors
+* **Smart Asset Management** — Auto-downloads and validates all mods and files before launch
+* **Automatic Java** — Detects and installs the right Java version for you
+* **Built-in News Feed** — Stay updated without leaving the launcher
+* **Auto-Updates** — The launcher keeps itself current
+* **Mojang Status Monitor** — Live service status built in
+* **Cross-Platform** — Windows, macOS, and Linux support
 
 ---
 
@@ -41,11 +47,11 @@ Download the latest installer from the [Releases](https://github.com/akatsukixpa
 ### Microsoft (OAuth 2.0)
 Login with your Microsoft account to play with your official Minecraft profile.
 
-### Mojang (Legacy)
-Login with a Mojang account (email + password).
-
 ### Ely.by (Free)
 Login with your [Ely.by](https://ely.by/) account. Ely.by provides free Minecraft accounts with full skin support. The launcher automatically downloads and injects [authlib-injector](https://github.com/yushijinhun/authlib-injector) to authenticate with the Ely.by auth server.
+
+### Mojang (Legacy)
+Login with a Mojang account (email + password).
 
 ### Offline Mode
 Play without any authentication. Just enter a username and go.
@@ -56,41 +62,22 @@ Play without any authentication. Just enter a username and go.
 
 ### Requirements
 
-* [Node.js v22](https://nodejs.org/) — download and install before anything else.
-* [Git](https://git-scm.com/) — needed to clone the repo.
-* npm (comes with Node.js)
+* [Node.js v22](https://nodejs.org/)
+* [Git](https://git-scm.com/)
 
----
-
-### Step 1 — Clone the repo
+### Quick Start
 
 ```console
 git clone https://github.com/akatsukixpain12-stack/EVO-LAUNCHER.git
 cd EVO-LAUNCHER
-```
-
-### Step 2 — Install dependencies
-
-```console
 npm install
-```
-
-### Step 3 — Run in development mode
-
-```console
 npm start
 ```
 
-The launcher window will open. That's it.
-
----
-
-### Step 4 — Build an installer (optional)
-
-To build a distributable installer for your platform:
+### Build Installer
 
 ```console
-# Windows (.exe installer)
+# Windows (.exe)
 npm run dist:win
 
 # macOS (.dmg)
@@ -100,17 +87,20 @@ npm run dist:mac
 npm run dist:linux
 ```
 
-The output will be in the `dist/` folder.
+Output goes to `dist/`.
 
 ---
 
-## Adding Your Logo
+## Creating a Release
 
-Place your logo file at:
+Push a version tag to trigger the GitHub Actions release workflow:
+
+```console
+git tag v2.3.0
+git push origin v2.3.0
 ```
-app/assets/images/EvoLogo.png
-```
-Also copy it to `build/icon.png` — this is used for the installer icon.
+
+This automatically builds installers for Windows, macOS, and Linux and publishes them as a GitHub Release.
 
 ---
 
@@ -122,19 +112,6 @@ Ctrl + Shift + I
 
 ---
 
-## Performance Tab
-
-Open Settings → **Performance** to access:
-
-- **Motion Blur** with intensity slider
-- **FPS Boost** with Balanced / Performance / Max FPS presets
-- **Entity Culling** — skip off-screen entities
-- **Fast Render** — reduce GPU overhead
-- **Smooth FPS** — eliminate frame stutters
-- **FPS Cap** — limit max FPS (30–300)
-
----
-
 ## License
 
-UNLICENSED — All rights reserved © EVO Launcher
+UNLICENSED — All rights reserved © EVO LAUNCHER

@@ -1,8 +1,8 @@
 appId: 'evolauncher'
-productName: 'EVO Launcher'
+productName: 'EVO LAUNCHER'
 artifactName: '${productName}-setup-${version}.${ext}'
 
-copyright: 'Copyright Â© 2024-2026 EVO Launcher'
+copyright: 'Copyright © 2024-2026 EVO LAUNCHER'
 
 asar: true
 compression: 'maximum'
@@ -28,6 +28,9 @@ nsis:
   perMachine: false
   allowElevation: true
   allowToChangeInstallationDirectory: true
+  installerIcon: 'app/assets/images/SealCircle.ico'
+  uninstallerIcon: 'app/assets/images/SealCircle.ico'
+  installerHeaderIcon: 'app/assets/images/SealCircle.ico'
 
 # macOS Configuration
 mac:
@@ -44,10 +47,10 @@ mac:
 linux:
   icon: 'app/assets/images/SealCircle.png'
   target: 'AppImage'
-  maintainer: 'EVO Launcher'
-  vendor: 'EVO Launcher'
-  synopsis: 'EVO Launcher â€” Modded Minecraft Launcher'
-  description: 'Custom launcher which allows users to join modded servers. All mods, configurations, and updates are handled automatically.'
+  maintainer: 'EVO LAUNCHER'
+  vendor: 'EVO LAUNCHER'
+  synopsis: 'EVO LAUNCHER — Free Minecraft Launcher'
+  description: 'Free Minecraft launcher with Microsoft, Ely.by, and Offline authentication. Built-in mod management, FPS optimization, and modern dark UI.'
   category: 'Game'
 
 

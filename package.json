@@ -1,13 +1,13 @@
 {
   "name": "evolauncher",
   "version": "2.2.1",
-  "productName": "EVO Launcher",
+  "productName": "EVO LAUNCHER",
   "description": "Modded Minecraft Launcher",
-  "author": "Daniel Scalzi (https://github.com/dscalzi/)",
+  "author": "akatsukixpain12-stack",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/dscalzi/HeliosLauncher",
+  "homepage": "https://github.com/akatsukixpain12-stack/EVO-LAUNCHER",
   "bugs": {
-    "url": "https://github.com/dscalzi/HeliosLauncher/issues"
+    "url": "https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/issues"
   },
   "private": true,
   "main": "index.js",
@@ -47,6 +47,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dscalzi/HeliosLauncher.git"
+    "url": "git+https://github.com/akatsukixpain12-stack/EVO-LAUNCHER.git"
   }
 }
