@@ -8,8 +8,7 @@ const ejse = require('ejs-electron')
 const fs = require('fs')
 const isDev = require('./app/assets/js/isdev')
 const path = require('path')
-const semver = require('semver')
-const got = require('got')
+const axios = require('axios')
 const crypto = require('crypto')
 
 const { pathToFileURL } = require('url')
@@ -18,7 +17,6 @@ const {
     AZURE_CLIENT_ID,
     MSFT_OPCODE,
     MSFT_REPLY_TYPE,
-    MSFT_ERROR,
     SHELL_OPCODE
 } = require('./app/assets/js/ipcconstants')
 
@@ -96,24 +94,16 @@ ipcMain.on('autoUpdateAction', (event, arg, data) => {
 // ==================== ELY.BY LOGIN ====================
 
 async function postJson(url, json) {
-
     try {
-
-        return await got.post(url, {
-            json,
-            responseType: 'json'
-        }).json()
-
+        const response = await axios.post(url, json)
+        return response.data
     } catch(err) {
-
-        const errorBody = err.response?.body
-
+        const errorData = err.response?.data
         throw new Error(
-            typeof errorBody === 'string'
-                ? errorBody
-                : JSON.stringify(errorBody || err.message)
+            typeof errorData === 'string'
+                ? errorData
+                : JSON.stringify(errorData || err.message)
         )
-
     }
 }
 
@@ -212,15 +202,12 @@ ipcMain.handle('elyby-invalidate', async (event, accessToken, clientToken) => {
 const REDIRECT_URI_PREFIX = 'https://login.microsoftonline.com/common/oauth2/nativeclient?'
 
 let msftAuthWindow
-let msftAuthSuccess
 
 ipcMain.on(MSFT_OPCODE.OPEN_LOGIN, (ipcEvent) => {
 
     if(msftAuthWindow){
         return
     }
-
-    msftAuthSuccess = false
 
     msftAuthWindow = new BrowserWindow({
         title: 'Microsoft Login',
@@ -245,12 +232,14 @@ ipcMain.on(MSFT_OPCODE.OPEN_LOGIN, (ipcEvent) => {
                 queryMap
             )
 
-            msftAuthSuccess = true
-
             msftAuthWindow.close()
             msftAuthWindow = null
         }
 
+    })
+
+    msftAuthWindow.on('closed', () => {
+        msftAuthWindow = null
     })
 
     msftAuthWindow.loadURL(
@@ -371,32 +360,6 @@ function createMenu() {
 
         Menu.setApplicationMenu(menuObject)
     }
-}
-
-// ==================== ICON ====================
-
-function getPlatformIcon(filename){
-
-    let ext
-
-    switch(process.platform){
-
-        case 'win32':
-            ext = 'ico'
-            break
-
-        default:
-            ext = 'png'
-            break
-    }
-
-    return path.join(
-        __dirname,
-        'app',
-        'assets',
-        'images',
-        `${filename}.${ext}`
-    )
 }
 
 // ==================== APP ====================

@@ -5,7 +5,7 @@ import globals from 'globals';
 
 export default defineConfig(
   {
-    ignores: ['**/dist/**', 'node_modules', 'eslint.config.mjs'],
+    ignores: ['**/dist/**', '**/.venv/**', 'node_modules', 'eslint.config.mjs'],
   },
   js.configs.recommended,
   {
@@ -33,7 +33,6 @@ export default defineConfig(
           requireLast: false
         }
       }],
-      '@stylistic/linebreak-style': ['error', 'windows'],
       'no-var': ['error'],
       'no-control-regex': 'off',
       'no-unused-vars': ['error', {

@@ -9,6 +9,7 @@ const os                    = require('os')
 const path                  = require('path')
 
 const ConfigManager            = require('./configmanager')
+const { getPerfJVMOptions } = require('./configmanager')
 
 const logger = LoggerUtil.getLogger('ProcessBuilder')
 
@@ -384,6 +385,9 @@ class ProcessBuilder {
         args.push('-Xmx' + ConfigManager.getMaxRAM(this.server.rawServer.id))
         args.push('-Xms' + ConfigManager.getMinRAM(this.server.rawServer.id))
         args = args.concat(ConfigManager.getJVMOptions(this.server.rawServer.id))
+
+        // Performance JVM Options
+        args = args.concat(getPerfJVMOptions())
         args.push('-Djava.library.path=' + tempNativePath)
 
         // Main Java Class
@@ -435,6 +439,9 @@ class ProcessBuilder {
         args.push('-Xmx' + ConfigManager.getMaxRAM(this.server.rawServer.id))
         args.push('-Xms' + ConfigManager.getMinRAM(this.server.rawServer.id))
         args = args.concat(ConfigManager.getJVMOptions(this.server.rawServer.id))
+
+        // Performance JVM Options
+        args = args.concat(getPerfJVMOptions())
 
         // Main Java Class
         args.push(this.modManifest.mainClass)
@@ -822,7 +829,7 @@ class ProcessBuilder {
                             }
                         })
 
-                        const extractName = fileName.includes('/') ? fileName.substring(fileName.lastIndexOf('/')) : fileName
+                        const extractName = path.basename(fileName)
 
                         // Extract the file.
                         if(!shouldExclude){

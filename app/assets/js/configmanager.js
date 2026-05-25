@@ -100,6 +100,18 @@ const DEFAULT_CONFIG = {
     authenticationDatabase: {},
     modConfigurations: [],
     javaConfig: {}
+    ,
+    performance: {
+        motionBlur: false,
+        motionBlurIntensity: 5,
+        fpsBoost: true,
+        fpsBoostPreset: 'performance',
+        entityCulling: true,
+        fastRender: true,
+        smoothFPS: false,
+        fpsCap: false,
+        fpsCapValue: 144
+    }
 }
 
 let config = null
@@ -832,4 +844,114 @@ exports.getAllowPrerelease = function(def = false){
  */
 exports.setAllowPrerelease = function(allowPrerelease){
     config.settings.launcher.allowPrerelease = allowPrerelease
+}
+
+// Performance Settings
+
+exports.getMotionBlur = function() {
+    return config.performance.motionBlur
+}
+exports.setMotionBlur = function(value) {
+    config.performance.motionBlur = value
+}
+
+exports.getMotionBlurIntensity = function() {
+    return config.performance.motionBlurIntensity
+}
+exports.setMotionBlurIntensity = function(value) {
+    config.performance.motionBlurIntensity = value
+}
+
+exports.getFpsBoost = function() {
+    return config.performance.fpsBoost
+}
+exports.setFpsBoost = function(value) {
+    config.performance.fpsBoost = value
+}
+
+exports.getFpsBoostPreset = function() {
+    return config.performance.fpsBoostPreset
+}
+exports.setFpsBoostPreset = function(value) {
+    config.performance.fpsBoostPreset = value
+}
+
+exports.getEntityCulling = function() {
+    return config.performance.entityCulling
+}
+exports.setEntityCulling = function(value) {
+    config.performance.entityCulling = value
+}
+
+exports.getFastRender = function() {
+    return config.performance.fastRender
+}
+exports.setFastRender = function(value) {
+    config.performance.fastRender = value
+}
+
+exports.getSmoothFPS = function() {
+    return config.performance.smoothFPS
+}
+exports.setSmoothFPS = function(value) {
+    config.performance.smoothFPS = value
+}
+
+exports.getFpsCap = function() {
+    return config.performance.fpsCap
+}
+exports.setFpsCap = function(value) {
+    config.performance.fpsCap = value
+}
+
+exports.getFpsCapValue = function() {
+    return config.performance.fpsCapValue
+}
+exports.setFpsCapValue = function(value) {
+    config.performance.fpsCapValue = value
+}
+
+/**
+ * Get the current performance JVM options to inject at launch.
+ * @returns {string[]} Array of JVM flag strings.
+ */
+exports.getPerfJVMOptions = function() {
+    const settings = config.performance
+    if (!settings.fpsBoost) return []
+
+    const presets = {
+        balanced: [
+            '-XX:+UseG1GC',
+            '-XX:G1NewSizePercent=20',
+            '-XX:G1ReservePercent=20',
+            '-XX:MaxGCPauseMillis=50',
+            '-XX:G1HeapRegionSize=32M'
+        ],
+        performance: [
+            '-XX:+UnlockExperimentalVMOptions',
+            '-XX:+UseG1GC',
+            '-XX:G1NewSizePercent=20',
+            '-XX:G1ReservePercent=20',
+            '-XX:MaxGCPauseMillis=50',
+            '-XX:G1HeapRegionSize=32M',
+            '-XX:+DisableExplicitGC',
+            '-XX:+AlwaysPreTouch',
+            '-XX:+ParallelRefProcEnabled'
+        ],
+        max: [
+            '-XX:+UnlockExperimentalVMOptions',
+            '-XX:+UseG1GC',
+            '-XX:G1NewSizePercent=30',
+            '-XX:G1ReservePercent=20',
+            '-XX:MaxGCPauseMillis=20',
+            '-XX:G1HeapRegionSize=32M',
+            '-XX:+DisableExplicitGC',
+            '-XX:+AlwaysPreTouch',
+            '-XX:+ParallelRefProcEnabled',
+            '-XX:+UseStringDeduplication',
+            '-XX:+OptimizeStringConcat',
+            '-XX:+UseCompressedOops'
+        ]
+    }
+    return presets[settings.fpsBoostPreset] || presets.performance
 }

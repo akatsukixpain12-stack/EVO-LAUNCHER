@@ -3,6 +3,7 @@
  */
 // Requirements
 const { URL }                 = require('url')
+const axios                   = require('axios')
 const {
     MojangRestAPI,
     getServerStatus
@@ -965,12 +966,11 @@ async function loadNews(){
     }
 
     const promise = new Promise((resolve, reject) => {
-        
         const newsFeed = distroData.rawDistribution.rss
         const newsHost = new URL(newsFeed).origin + '/'
-        $.ajax({
-            url: newsFeed,
-            success: (data) => {
+        axios.get(newsFeed, { timeout: 2500 })
+            .then(response => {
+                const data = response.data
                 const items = $(data).find('item')
                 const articles = []
 
@@ -1013,13 +1013,12 @@ async function loadNews(){
                 resolve({
                     articles
                 })
-            },
-            timeout: 2500
-        }).catch(err => {
-            resolve({
-                articles: null
             })
-        })
+            .catch(err => {
+                resolve({
+                    articles: null
+                })
+            })
     })
 
     return await promise

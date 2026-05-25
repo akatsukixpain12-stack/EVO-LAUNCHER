@@ -2,10 +2,12 @@
 const os     = require('os')
 const path   = require('path')
 const semver = require('semver')
+const axios  = require('axios')
 
 const DropinModUtil  = require('./assets/js/dropinmodutil')
+const ConfigManager  = require('../configmanager')
 const { MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR } = require('./assets/js/ipcconstants')
-
+const { getPerfJVMOptions } = require('../configmanager') // Keep this for processbuilder
 const settingsState = {
     invalid: new Set()
 }
@@ -209,6 +211,18 @@ function saveSettingsValues(){
                     if(cVal === 'AllowPrerelease'){
                         changeAllowPrerelease(v.checked)
                     }
+                    // Performance Settings
+                    if(cVal === 'MotionBlur') ConfigManager.setMotionBlur(v.checked)
+                    if(cVal === 'FpsBoost') ConfigManager.setFpsBoost(v.checked)
+                    if(cVal === 'EntityCulling') ConfigManager.setEntityCulling(v.checked)
+                    if(cVal === 'FastRender') ConfigManager.setFastRender(v.checked)
+                    if(cVal === 'SmoothFPS') ConfigManager.setSmoothFPS(v.checked)
+                    if(cVal === 'FpsCap') ConfigManager.setFpsCap(v.checked)
+                } else if (v.type === 'range') {
+                    // Performance Settings
+                    if(cVal === 'MotionBlurIntensity') ConfigManager.setMotionBlurIntensity(Number(v.value))
+                    if(cVal === 'FpsCapValue') ConfigManager.setFpsCapValue(Number(v.value))
+
                 }
             } else if(v.tagName === 'DIV'){
                 if(v.classList.contains('rangeSlider')){
@@ -224,6 +238,10 @@ function saveSettingsValues(){
                         sFnOpts.push(val)
                         sFn.apply(null, sFnOpts)
                     } else {
+                        // Performance Settings (for preset buttons)
+                        if(cVal === 'FpsBoostPreset') {
+                            ConfigManager.setFpsBoostPreset(v.getAttribute('value'))
+                        }
                         sFnOpts.push(v.getAttribute('value'))
                         sFn.apply(null, sFnOpts)
                     }
@@ -930,27 +948,24 @@ function parseModrinthProjectSlug(input){
 }
 
 async function downloadRemoteMod(url, suggestedName){
-    const response = await fetch(url)
-    if(!response.ok){
-        throw new Error(`HTTP ${response.status}`)
-    }
+    const response = await axios.get(url, { responseType: 'arraybuffer' })
 
     const urlPathName = (() => {
         try {
-            return new URL(response.url).pathname
+            return new URL(response.request.responseURL || url).pathname
         } catch(_err) {
             return ''
         }
     })()
 
-    const fileName = suggestedName || path.basename(urlPathName || new URL(url).pathname)
+    const fileName = suggestedName || path.basename(urlPathName)
     const ext = path.extname(fileName).toLowerCase()
 
     if(!REMOTE_MOD_EXTENSIONS.has(ext)){
         throw new Error('unsupported-file-type')
     }
 
-    const buffer = Buffer.from(await response.arrayBuffer())
+    const buffer = Buffer.from(response.data)
     DropinModUtil.writeDropinMod(buffer, fileName, CACHE_SETTINGS_MODS_DIR)
 
     return fileName
@@ -979,12 +994,8 @@ async function importFromModrinth(){
     })
 
     try {
-        let response = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${params.toString()}`)
-        let versions = await response.json()
-
-        if(!response.ok){
-            throw new Error(`HTTP ${response.status}`)
-        }
+        let res = await axios.get(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${params.toString()}`)
+        let versions = res.data
 
         if(!Array.isArray(versions) || versions.length === 0){
             const fallbackParams = new URLSearchParams({
@@ -992,8 +1003,8 @@ async function importFromModrinth(){
                 game_versions: JSON.stringify([serv.rawServer.minecraftVersion]),
                 include_changelog: 'false'
             })
-            response = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
-            versions = await response.json()
+            res = await axios.get(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
+            versions = res.data
         }
 
         if(!Array.isArray(versions) || versions.length === 0){
@@ -1663,9 +1674,9 @@ function populateAboutVersionInformation(){
  * of the current version. This value is displayed on the UI.
  */
 function populateReleaseNotes(){
-    $.ajax({
-        url: 'https://github.com/dscalzi/HeliosLauncher/releases.atom',
-        success: (data) => {
+    axios.get('https://github.com/dscalzi/HeliosLauncher/releases.atom', { timeout: 2500 })
+        .then(response => {
+            const data = response.data
             const version = 'v' + remote.app.getVersion()
             const entries = $(data).find('entry')
             
@@ -1681,9 +1692,8 @@ function populateReleaseNotes(){
                 }
             }
 
-        },
-        timeout: 2500
-    }).catch(err => {
+        })
+        .catch(err => {
         settingsAboutChangelogText.innerHTML = Lang.queryJS('settings.about.releaseNotesFailed')
     })
 }
@@ -1799,55 +1809,14 @@ async function prepareSettings(first = false) {
    ============================================================ */
 
 /**
- * Performance settings storage key.
- */
-const PERF_STORAGE_KEY = 'evo_perf_settings'
-
-/**
- * Load performance settings from localStorage.
- * @returns {Object} The stored performance settings.
- */
-function loadPerfSettings() {
-    const defaults = {
-        motionBlur: false,
-        motionBlurIntensity: 5,
-        fpsBoost: true,
-        fpsBoostPreset: 'performance',
-        entityCulling: true,
-        fastRender: true,
-        smoothFPS: false,
-        fpsCap: false,
-        fpsCapValue: 144
-    }
-    try {
-        const stored = localStorage.getItem(PERF_STORAGE_KEY)
-        return stored ? Object.assign({}, defaults, JSON.parse(stored)) : defaults
-    } catch(e) {
-        return defaults
-    }
-}
-
-/**
- * Save performance settings to localStorage.
- * @param {Object} settings The settings to save.
- */
-function savePerfSettings(settings) {
-    try {
-        localStorage.setItem(PERF_STORAGE_KEY, JSON.stringify(settings))
-    } catch(e) {
-        console.error('Failed to save performance settings', e)
-    }
-}
-
-/**
  * Update a toggle card's status label.
  * @param {string} statusId The element id of the status span.
  * @param {boolean} enabled Whether the feature is enabled.
  */
 function updatePerfStatus(statusId, enabled) {
     const el = document.getElementById(statusId)
-    if (!el) return
-    el.textContent = enabled ? 'ENABLED' : 'DISABLED'
+    if (!el) { return }
+    el.textContent = enabled ? Lang.queryJS('settings.performance.enabled') : Lang.queryJS('settings.performance.disabled')
     if (enabled) {
         el.classList.add('enabled')
     } else {
@@ -1864,18 +1833,17 @@ function updatePerfStatus(statusId, enabled) {
  */
 function bindPerfToggle(toggleId, statusId, settingKey, sliderRowId = null) {
     const toggle = document.getElementById(toggleId)
-    if (!toggle) return
-    const settings = loadPerfSettings()
-    toggle.checked = settings[settingKey]
+    if (!toggle) { return }
+    toggle.checked = ConfigManager[`get${settingKey}`]()
     updatePerfStatus(statusId, toggle.checked)
     if (sliderRowId) {
         const row = document.getElementById(sliderRowId)
         if (row) row.classList.toggle('hidden', !toggle.checked)
     }
     toggle.addEventListener('change', () => {
-        const s = loadPerfSettings()
-        s[settingKey] = toggle.checked
-        savePerfSettings(s)
+        // Use ConfigManager setter directly
+        ConfigManager'set' + settingKey
+        ConfigManager.save()
         updatePerfStatus(statusId, toggle.checked)
         if (sliderRowId) {
             const row = document.getElementById(sliderRowId)
@@ -1888,30 +1856,29 @@ function bindPerfToggle(toggleId, statusId, settingKey, sliderRowId = null) {
  * Prepare the Performance tab â€” bind all toggles, sliders, and presets.
  */
 function preparePerformanceTab() {
-    const settings = loadPerfSettings()
+    const settings = ConfigManager.performance
 
     // Motion Blur
-    bindPerfToggle('toggleMotionBlur', 'statusMotionBlur', 'motionBlur', 'motionBlurSliderRow')
+    bindPerfToggle('toggleMotionBlur', 'statusMotionBlur', 'MotionBlur', 'motionBlurSliderRow')
     const mbSlider = document.getElementById('motionBlurIntensity')
     const mbValue  = document.getElementById('motionBlurValue')
     if (mbSlider && mbValue) {
-        mbSlider.value = settings.motionBlurIntensity
+        mbSlider.value = ConfigManager.getMotionBlurIntensity()
         mbValue.textContent = settings.motionBlurIntensity
         mbSlider.addEventListener('input', () => {
             mbValue.textContent = mbSlider.value
-            const s = loadPerfSettings()
-            s.motionBlurIntensity = Number(mbSlider.value)
-            savePerfSettings(s)
+            ConfigManager.setMotionBlurIntensity(Number(mbSlider.value))
+            ConfigManager.save()
         })
     }
 
     // FPS Boost
-    bindPerfToggle('toggleFPSBoost', 'statusFPSBoost', 'fpsBoost', 'fpsCapSliderRow')
+    bindPerfToggle('toggleFPSBoost', 'statusFPSBoost', 'FpsBoost', 'fpsCapSliderRow')
 
     // FPS Boost Presets
     const presetBtns = document.querySelectorAll('.perfPresetBtn')
     presetBtns.forEach(btn => {
-        if (btn.getAttribute('data-preset') === settings.fpsBoostPreset) {
+        if (btn.getAttribute('data-preset') === ConfigManager.getFpsBoostPreset()) {
             btn.classList.add('active')
         } else {
             btn.classList.remove('active')
@@ -1919,125 +1886,32 @@ function preparePerformanceTab() {
         btn.addEventListener('click', () => {
             presetBtns.forEach(b => b.classList.remove('active'))
             btn.classList.add('active')
-            const s = loadPerfSettings()
-            s.fpsBoostPreset = btn.getAttribute('data-preset')
-            savePerfSettings(s)
-            applyFPSBoostPreset(s.fpsBoostPreset)
+            ConfigManager.setFpsBoostPreset(btn.getAttribute('data-preset'))
+            ConfigManager.save()
+            // No need to call applyFPSBoostPreset here, it's handled by processbuilder
         })
     })
 
     // Entity Culling
-    bindPerfToggle('toggleEntityCulling', 'statusEntityCulling', 'entityCulling')
+    bindPerfToggle('toggleEntityCulling', 'statusEntityCulling', 'EntityCulling')
 
     // Fast Render
-    bindPerfToggle('toggleFastRender', 'statusFastRender', 'fastRender')
+    bindPerfToggle('toggleFastRender', 'statusFastRender', 'FastRender')
 
     // Smooth FPS
-    bindPerfToggle('toggleSmoothFPS', 'statusSmoothFPS', 'smoothFPS')
+    bindPerfToggle('toggleSmoothFPS', 'statusSmoothFPS', 'SmoothFPS')
 
     // FPS Cap
-    bindPerfToggle('toggleFPSCap', 'statusFPSCap', 'fpsCap', 'fpsCapSliderRow')
+    bindPerfToggle('toggleFPSCap', 'statusFPSCap', 'FpsCap', 'fpsCapSliderRow')
     const fpsCapSlider  = document.getElementById('fpsCapValue')
     const fpsCapDisplay = document.getElementById('fpsCapDisplay')
     if (fpsCapSlider && fpsCapDisplay) {
-        fpsCapSlider.value = settings.fpsCapValue
+        fpsCapSlider.value = ConfigManager.getFpsCapValue()
         fpsCapDisplay.textContent = settings.fpsCapValue
         fpsCapSlider.addEventListener('input', () => {
             fpsCapDisplay.textContent = fpsCapSlider.value
-            const s = loadPerfSettings()
-            s.fpsCapValue = Number(fpsCapSlider.value)
-            savePerfSettings(s)
+            ConfigManager.setFpsCapValue(Number(fpsCapSlider.value))
+            ConfigManager.save()
         })
     }
-}
-
-/**
- * Apply FPS boost JVM flags based on the selected preset.
- * These are injected as additional JVM options when the game launches.
- * @param {string} preset 'balanced' | 'performance' | 'max'
- */
-function applyFPSBoostPreset(preset) {
-    const presets = {
-        balanced: [
-            '-XX:+UseG1GC',
-            '-XX:G1NewSizePercent=20',
-            '-XX:G1ReservePercent=20',
-            '-XX:MaxGCPauseMillis=50',
-            '-XX:G1HeapRegionSize=32M'
-        ],
-        performance: [
-            '-XX:+UnlockExperimentalVMOptions',
-            '-XX:+UseG1GC',
-            '-XX:G1NewSizePercent=20',
-            '-XX:G1ReservePercent=20',
-            '-XX:MaxGCPauseMillis=50',
-            '-XX:G1HeapRegionSize=32M',
-            '-XX:+DisableExplicitGC',
-            '-XX:+AlwaysPreTouch',
-            '-XX:+ParallelRefProcEnabled'
-        ],
-        max: [
-            '-XX:+UnlockExperimentalVMOptions',
-            '-XX:+UseG1GC',
-            '-XX:G1NewSizePercent=30',
-            '-XX:G1ReservePercent=20',
-            '-XX:MaxGCPauseMillis=20',
-            '-XX:G1HeapRegionSize=32M',
-            '-XX:+DisableExplicitGC',
-            '-XX:+AlwaysPreTouch',
-            '-XX:+ParallelRefProcEnabled',
-            '-XX:+UseStringDeduplication',
-            '-XX:+OptimizeStringConcat',
-            '-XX:+UseCompressedOops'
-        ]
-    }
-    const flags = presets[preset] || presets.performance
-    console.log(`[EVO] FPS Boost preset "${preset}" applied:`, flags)
-    // Flags are read by processbuilder via getPerfJVMOptions()
-}
-
-/**
- * Get the current performance JVM options to inject at launch.
- * Called by processbuilder when building the launch command.
- * @returns {string[]} Array of JVM flag strings.
- */
-function getPerfJVMOptions() {
-    const settings = loadPerfSettings()
-    if (!settings.fpsBoost) return []
-
-    const presets = {
-        balanced: [
-            '-XX:+UseG1GC',
-            '-XX:G1NewSizePercent=20',
-            '-XX:G1ReservePercent=20',
-            '-XX:MaxGCPauseMillis=50',
-            '-XX:G1HeapRegionSize=32M'
-        ],
-        performance: [
-            '-XX:+UnlockExperimentalVMOptions',
-            '-XX:+UseG1GC',
-            '-XX:G1NewSizePercent=20',
-            '-XX:G1ReservePercent=20',
-            '-XX:MaxGCPauseMillis=50',
-            '-XX:G1HeapRegionSize=32M',
-            '-XX:+DisableExplicitGC',
-            '-XX:+AlwaysPreTouch',
-            '-XX:+ParallelRefProcEnabled'
-        ],
-        max: [
-            '-XX:+UnlockExperimentalVMOptions',
-            '-XX:+UseG1GC',
-            '-XX:G1NewSizePercent=30',
-            '-XX:G1ReservePercent=20',
-            '-XX:MaxGCPauseMillis=20',
-            '-XX:G1HeapRegionSize=32M',
-            '-XX:+DisableExplicitGC',
-            '-XX:+AlwaysPreTouch',
-            '-XX:+ParallelRefProcEnabled',
-            '-XX:+UseStringDeduplication',
-            '-XX:+OptimizeStringConcat',
-            '-XX:+UseCompressedOops'
-        ]
-    }
-    return presets[settings.fpsBoostPreset] || presets.performance
 }
