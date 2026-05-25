@@ -64,7 +64,7 @@ body, button {
     display: flex;
     flex-direction: column;
     transition: background-color 1s ease;
-    /*background-color: rgba(0, 0, 0, 0.5);*/
+    background-color: rgba(10, 10, 20, 0.6);
     -webkit-user-select: none;
 }
 
@@ -141,13 +141,14 @@ body, button {
     height: 22px;
     width: 39px;
     cursor: pointer;
+    transition: background 0.15s ease;
 }
 .frameButton:hover,
 .frameButton:focus {
-    background: rgba(189, 189, 189, 0.43);
+    background: rgba(255, 255, 255, 0.08);
 }
 .frameButton:active {
-    background: rgba(156, 156, 156, 0.43);
+    background: rgba(255, 255, 255, 0.04);
 }
 .frameButton:focus {
     outline: 0px;
@@ -385,7 +386,7 @@ body, button {
     height: 100%;
     width: 100%;
     transition: filter 0.25s ease;
-    background: rgba(0, 0, 0, 0.50);
+    background: linear-gradient(135deg, rgba(13, 13, 26, 0.95) 0%, rgba(26, 26, 46, 0.95) 50%, rgba(22, 33, 62, 0.95) 100%);
 }
 
 /* Login cancel button styles. */
@@ -559,32 +560,35 @@ body, button {
 /* Login text input styles. */
 .loginField {
     font-family: 'Avenir Book';
-    background: none;
-    border-width: 1.5px 0px 0px 0px;
-    border-style: solid;
-    width: 250px;
-    margin-bottom: 20px;
-    border-color: #fff;
-    color: rgba(255, 255, 255, 0.75);
-    font-weight: bold;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    width: 280px;
+    margin-bottom: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
     text-align: center;
     box-sizing: border-box;
-    padding: 7.5px;
-    font-size: 10px;
-    letter-spacing: 1px;
+    padding: 12px 16px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
 }
 .loginField:focus {
     outline: none;
+    border-color: rgba(255, 100, 50, 0.4);
+    background: rgba(255, 255, 255, 0.08);
 }
 .loginField:disabled {
-    color: rgba(255, 255, 255, 0.50);
+    color: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.02);
 }
 .loginField::-webkit-input-placeholder {
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 10px;
-    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 12px;
+    letter-spacing: 0.5px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
 }
 .loginField:focus::-webkit-input-placeholder {
     color: transparent;
@@ -610,20 +614,30 @@ body, button {
 
 /* Login button styles. */
 #loginButton {
-    background: none;
-    font-weight: bold;
+    background: linear-gradient(135deg, #ff6432, #ff8a50);
+    font-weight: 700;
     letter-spacing: 2px;
     border: none;
-    padding: 15px 5px;
-    margin: 10px 0px;
+    padding: 12px 40px;
+    margin: 16px 0px;
     cursor: pointer;
     position: relative;
-    right: -20px;
-    transition: 0.5s ease;
+    right: 0;
+    transition: all 0.25s ease;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    box-shadow: 0 4px 16px rgba(255, 100, 50, 0.3);
+}
+#loginButton:hover {
+    box-shadow: 0 6px 24px rgba(255, 100, 50, 0.5);
+    transform: translateY(-1px);
 }
 #loginButton:disabled {
-    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.3);
     pointer-events: none;
+    box-shadow: none;
 }
 #loginButton[loading] {
     color: #fff;
@@ -887,7 +901,7 @@ body, button {
     height: 100%;
     width: 100%;
     transition: filter 0.25s ease;
-    background: rgba(0, 0, 0, 0.50);
+    background: linear-gradient(135deg, rgba(13, 13, 26, 0.95) 0%, rgba(26, 26, 46, 0.95) 50%, rgba(22, 33, 62, 0.95) 100%);
 }
 
 #waitingContent {
@@ -961,83 +975,279 @@ body, button {
 #loginOptionsContainer {
     position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100%;
     width: 100%;
     transition: filter 0.25s ease;
-    background: rgba(0, 0, 0, 0.50);
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #16213e 100%);
+    overflow-y: auto;
 }
 
 #loginOptionsContent {
-    border-radius: 3px;
     position: relative;
-    top: -5%;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 50px;
 }
 
 .loginOptionsMainContent {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 24px;
 }
 
+/* Header with icon and title */
+.loginOptionsHeader {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.loginOptionsHeaderIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.loginOptionsHeaderText h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Avenir Medium', sans-serif;
+}
+
+.loginOptionsHeaderDesc {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: 'Avenir Book', sans-serif;
+}
+
+/* Getting Started section */
+.loginOptionsGettingStarted {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 28px 32px;
+    position: relative;
+}
+
+.gettingStartedBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 100, 50, 0.15);
+    color: #ff6432;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+}
+
+.gettingStartedBadge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff6432;
+}
+
+.loginOptionsGettingStarted h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.loginOptionsGettingStarted p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+}
+
+.gettingStartedSteps {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gettingStartedStep {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.stepNumber {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6432, #ff8a50);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stepContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stepContent strong {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.stepContent span {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Method header */
+.loginOptionsMethodHeader {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Card-based login options */
 .loginOptionActions {
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
+    gap: 10px;
 }
 
-.loginOptionButtonContainer {
-    width: 16em;
-}
-
-.loginOptionButton {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(126, 126, 126, 0.57);
-    border-radius: 3px;
-    height: 50px;
+.loginOptionCard {
     width: 100%;
-    text-align: left;
-    padding: 0px 25px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.25s ease;
+}
+
+.loginOptionCardButton {
+    width: 100%;
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    text-align: left;
 }
-.loginOptionButton:hover,
-.loginOptionButton:focus {
-    background: rgba(54, 54, 54, 0.25);
-    text-shadow: 0px 0px 20px white;
+
+.loginOptionCardButton:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+.loginOptionCardButton:active {
+    transform: translateX(2px);
+}
+
+.loginOptionCardIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.loginOptionCardIconOffline {
+    background: rgba(255, 100, 50, 0.15);
+    color: #ff6432;
+}
+
+.loginOptionCardIconMicrosoft {
+    background: rgba(5, 166, 240, 0.12);
+}
+
+.loginOptionCardIconElyBy {
+    background: rgba(76, 175, 80, 0.12);
+}
+
+.loginOptionCardIconMojang {
+    background: rgba(219, 35, 49, 0.12);
+}
+
+.loginOptionCardText {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.loginOptionCardTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    font-family: 'Avenir Medium', sans-serif;
+}
+
+.loginOptionCardDesc {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Avenir Book', sans-serif;
+}
+
+.loginOptionCardArrow {
+    color: rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.loginOptionCardButton:hover .loginOptionCardArrow {
+    color: rgba(255, 255, 255, 0.5);
+    transform: translateX(3px);
 }
 
 #loginOptionCancelContainer {
-    position: absolute;
-    bottom: -100px;
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
 }
 
 #loginOptionCancelButton {
     background: none;
-    border: none;
-    padding: 2px 0px;
-    font-size: 16px;
-    font-weight: bold;
-    color: lightgrey;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     outline: none;
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
 }
 #loginOptionCancelButton:hover,
 #loginOptionCancelButton:focus {
-    text-shadow: 0px 0px 20px lightgrey;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 #loginOptionCancelButton:active {
-    text-shadow: 0px 0px 20px rgba(211, 211, 211, 0.75);
-    color: rgba(211, 211, 211, 0.75);
+    background: rgba(255, 255, 255, 0.03);
 }
 #loginOptionCancelButton:disabled {
-    color: rgba(211, 211, 211, 0.75);
+    color: rgba(211, 211, 211, 0.3);
     pointer-events: none;
 }
 
@@ -1053,7 +1263,7 @@ body, button {
     position: relative;
     height: 100%;
     display: flex;
-    background-color: rgba(0, 0, 0, 0.50);
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #16213e 100%);
     transition: background-color 0.25s cubic-bezier(.02, .01, .47, 1);
 }
 
@@ -1077,6 +1287,8 @@ body, button {
     height: 100%;
     width: 25%;
     box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Settings navigation container. */
@@ -1117,22 +1329,25 @@ body, button {
     background: none;
     border: none;
     text-align: left;
-    margin: 5px 0px;
-    padding: 0px 20px;
-    color: grey;
+    margin: 2px 8px;
+    padding: 8px 16px;
+    color: rgba(255, 255, 255, 0.45);
     cursor: pointer;
     outline: none;
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    font-size: 13px;
 }
 .settingsNavItem:hover,
 .settingsNavItem:focus {
-    color: #c1c1c1;
-    text-shadow: 0px 0px 20px #c1c1c1;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
 }
 .settingsNavItem[selected] {
     cursor: default;
     color: white;
-    text-shadow: none;
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 600;
 }
 
 /* Div to add some space between nav items. */
@@ -1157,26 +1372,29 @@ body, button {
 
 /* Settings done button styles. */
 #settingsNavDone {
-    background: none;
-    border: none;
-    text-align: left;
-    margin: 5px 0px;
-    padding: 0px 20px;
-    color: white;
+    background: rgba(255, 100, 50, 0.12);
+    border: 1px solid rgba(255, 100, 50, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    margin: 8px 16px;
+    padding: 8px 20px;
+    color: #ff6432;
     cursor: pointer;
     outline: none;
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 13px;
 }
 #settingsNavDone:hover,
 #settingsNavDone:focus {
-    text-shadow: 0px 0px 20px white, 0px 0px 20px white, 0px 0px 20px white;
+    background: rgba(255, 100, 50, 0.2);
+    border-color: rgba(255, 100, 50, 0.4);
 }
 #settingsNavDone:active {
-    text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.75), 0px 0px 20px rgba(255, 255, 255, 0.75), 0px 0px 20px rgba(255, 255, 255, 0.75);
-    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 100, 50, 0.15);
 }
 #settingsNavDone:disabled {
-    color: rgba(255, 255, 255, 0.75);
+    opacity: 0.4;
     pointer-events: none;
 }
 
@@ -1218,24 +1436,31 @@ body, button {
 .settingsTabHeader {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 .settingsTabHeaderText {
-    font-size: 20px;
+    font-size: 22px;
     font-family: 'Avenir Medium';
+    font-weight: 700;
+    color: #fff;
 }
 .settingsTabHeaderDesc {
-    font-size: 12px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 4px;
 }
 
 /* Selected server content container */
 .settingsSelServContainer {
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(255, 255, 255, 0.04);
     width: 75%;
-    border-radius: 3px;
+    border-radius: 10px;
     display: flex;
     justify-content: space-between;
     margin: 15px 0px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Div which will be populated with the selected server's information. */
@@ -1290,16 +1515,18 @@ body, button {
 #settingsContainer input[type=number],
 #settingsContainer input[type=text] {
     color: white;
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: 3px;
-    border: 1px solid rgba(126, 126, 126, 0.57);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     font-family: 'Avenir Book';
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
+    padding: 8px 12px;
 }
 #settingsContainer input[type=number]:focus,
 #settingsContainer input[type=text]:focus {
     outline: none;
-    border-color: rgba(126, 126, 126, 0.87);
+    border-color: rgba(255, 100, 50, 0.4);
+    background: rgba(255, 255, 255, 0.06);
 }
 #settingsContainer input[type=number][error] {
     border-color: rgb(255, 27, 12);
@@ -1355,10 +1582,10 @@ body, button {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.35);
-    transition: .4s;
+    background-color: rgba(255, 255, 255, 0.12);
+    transition: .3s;
     border-radius: 50px;
-    border: 1px solid rgba(126, 126, 126, 0.57);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .toggleSwitchSlider:before {
     position: absolute;
@@ -1373,9 +1600,9 @@ body, button {
     transition: .4s;
 }
 input:checked + .toggleSwitchSlider {
-    background-color: rgb(31, 140, 11);
-    /* box-shadow: inset 2px 1px 20px black; */
-    border: 1px solid rgb(31, 140, 11);
+    background-color: #ff6432;
+    border: 1px solid #ff6432;
+    box-shadow: 0 0 8px rgba(255, 100, 50, 0.3);
 }
 input:checked + .toggleSwitchSlider:before {
     transform: translateX(15px);
@@ -1384,29 +1611,31 @@ input:checked + .toggleSwitchSlider:before {
 /* Range Slider styles. */
 .rangeSlider {
     width: 35%;
-    height: 5px;
+    height: 6px;
     margin: 15px 0px;
-    background: grey;
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
     position: relative;
 }
 .rangeSliderBar {
     position: absolute;
-    background: #8be88b;
+    background: linear-gradient(90deg, #ff6432, #ff8a50);
     width: 50%;
-    height: 5px;
-    border-radius: 3px 0px 0px 3px;
+    height: 6px;
+    border-radius: 6px 0px 0px 6px;
     transition: background 0.25s ease;
 }
 .rangeSliderTrack {
     position: absolute;
-    top: -7.5px;
-    width: 7px;
-    height: 20px;
-    background: white;
-    border-radius: 3px;
+    top: -5px;
+    width: 16px;
+    height: 16px;
+    background: #ff6432;
+    border-radius: 50%;
     left: 50%;
     cursor: ew-resize;
+    box-shadow: 0 0 8px rgba(255, 100, 50, 0.4);
+    transform: translateX(-50%);
 }
 
 /* File selectors */
@@ -1415,10 +1644,14 @@ input:checked + .toggleSwitchSlider:before {
 .settingsFileSelContainer {
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.50);
-    margin-bottom: 20px;
-    margin-top: 20px;
-    width: 75%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    margin-top: 16px;
+    width: 90%;
+    box-sizing: border-box;
 }
 
 /* File selector title. */
@@ -1436,10 +1669,10 @@ input:checked + .toggleSwitchSlider:before {
 .settingsFileSelIcon {
     display: flex;
     align-items: center;
-    background: rgba(126, 126, 126, 0.57);
-    border-radius: 3px 0px 0px 3px;
-    padding: 5px;
-    transition: 0.25s ease;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 8px 0px 0px 8px;
+    padding: 8px;
+    transition: all 0.2s ease;
 }
 .settingsFileSelSVG {
     width: 20px;
@@ -1458,31 +1691,34 @@ input:checked + .toggleSwitchSlider:before {
 
 /* File selection button. */
 .settingsFileSelButton {
-    border: 0px;
-    border-radius: 0px 3px 3px 0px;
+    border: 1px solid rgba(255, 100, 50, 0.3);
+    border-radius: 0px 8px 8px 0px;
     font-size: 12px;
-    padding: 0px 5px;
+    padding: 0px 12px;
     cursor: pointer;
-    background: rgba(126, 126, 126, 0.57);
-    transition: 0.25s ease;
+    background: rgba(255, 100, 50, 0.1);
+    transition: all 0.2s ease;
     white-space: nowrap;
     outline: none;
+    color: #ff6432;
+    font-weight: 600;
 }
 .settingsFileSelButton:hover,
 .settingsFileSelButton:focus {
-    text-shadow: 0px 0px 20px white;
+    background: rgba(255, 100, 50, 0.2);
+    border-color: rgba(255, 100, 50, 0.5);
 }
 .settingsFileSelButton:active {
-    text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.75);
-    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 100, 50, 0.15);
 }
 
 /* Description for the file selector. */
 .settingsFileSelDesc {
-    font-size: 10px;
-    margin: 20px 0px;
-    color: lightgrey;
-    width: 89%;
+    font-size: 11px;
+    margin: 16px 0px;
+    color: rgba(255, 255, 255, 0.4);
+    width: 100%;
+    line-height: 1.5;
 }
 .settingsFileSelDesc strong {
     font-family: 'Avenir Medium';
@@ -1494,8 +1730,13 @@ input:checked + .toggleSwitchSlider:before {
 
 .settingsAuthAccountTypeContainer {
     display: flex;
-    width: 75%;
+    width: 90%;
     flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
 }
 
 .settingsAuthAccountTypeHeader {
@@ -1503,37 +1744,46 @@ input:checked + .toggleSwitchSlider:before {
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    padding: 10px 0px;
-    border-bottom: 1px solid #ffffff85;
-    margin-bottom: 30px;
+    padding: 0 0 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 16px;
 }
 
 .settingsAuthAccountTypeHeaderLeft {
     display: flex;
-    column-gap: 5px;
+    align-items: center;
+    column-gap: 8px;
+}
+
+.settingsAuthAccountTypeHeaderLeft span {
+    font-size: 14px;
+    font-weight: 600;
 }
 
 /* Settings add account button styles. */
 .settingsAddAuthAccount {
-    background: none;
-    border: none;
-    text-align: left;
-    padding: 2px 0px;
-    color: white;
+    background: rgba(255, 100, 50, 0.12);
+    border: 1px solid rgba(255, 100, 50, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    padding: 6px 16px;
+    color: #ff6432;
     cursor: pointer;
     outline: none;
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    font-weight: 600;
 }
 .settingsAddAuthAccount:hover,
 .settingsAddAuthAccount:focus {
-    text-shadow: 0px 0px 20px white, 0px 0px 20px white, 0px 0px 20px white;
+    background: rgba(255, 100, 50, 0.2);
+    border-color: rgba(255, 100, 50, 0.4);
 }
 .settingsAddAuthAccount:active {
-    text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.75), 0px 0px 20px rgba(255, 255, 255, 0.75), 0px 0px 20px rgba(255, 255, 255, 0.75);
-    color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 100, 50, 0.15);
 }
 .settingsAddAuthAccount:disabled {
-    color: rgba(255, 255, 255, 0.75);
+    opacity: 0.4;
     pointer-events: none;
 }
 
@@ -1551,9 +1801,14 @@ input:checked + .toggleSwitchSlider:before {
 /* Auth account shared styles. */
 .settingsAuthAccount {
     display: flex;
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: 3px;
-    border: 1px solid rgba(126, 126, 126, 0.57);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+}
+.settingsAuthAccount:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Left hand side of an auth account element, for the skin image. */
@@ -1590,13 +1845,16 @@ input:checked + .toggleSwitchSlider:before {
     flex-direction: column;
 }
 .settingsAuthAccountDetailTitle {
-    font-size: 12px;
-    color: grey;
-    font-weight: bold;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
     font-family: 'Avenir Medium';
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .settingsAuthAccountDetailValue {
-    font-size: 14px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
     -webkit-user-select: initial;
 }
 
@@ -1612,16 +1870,20 @@ input:checked + .toggleSwitchSlider:before {
 /* Account select button shared styles. */
 .settingsAuthAccountSelect {
     opacity: 0;
-    border: none;
+    border: 1px solid rgba(255, 100, 50, 0.3);
     white-space: nowrap;
-    background: none;
+    background: rgba(255, 100, 50, 0.1);
     font-family: 'Avenir Medium';
     outline: none;
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: #ff6432;
 }
 .settingsAuthAccountSelect:hover:not([selected]),
 .settingsAuthAccountSelect:focus:not([selected]) {
-    text-shadow: 0px 0px 20px white, 0px 0px 20px white;
+    background: rgba(255, 100, 50, 0.2);
     cursor: pointer;
 }
 .settingsAuthAccount:hover .settingsAuthAccountSelect:not([selected]),
@@ -1630,31 +1892,32 @@ input:checked + .toggleSwitchSlider:before {
 }
 .settingsAuthAccountSelect[selected] {
     pointer-events: none;
+    background: rgba(76, 175, 80, 0.12);
+    border-color: rgba(76, 175, 80, 0.3);
+    color: #4caf50;
 }
 
 /* Account logout button shared styles. */
 .settingsAuthAccountLogOut {
     opacity: 0;
-    border: 1px solid rgb(241, 55, 55);
+    border: 1px solid rgba(241, 55, 55, 0.3);
     color: rgb(241, 55, 55);
-    background: none;
-    font-size: 12px;
-    border-radius: 3px;
+    background: rgba(241, 55, 55, 0.08);
+    font-size: 11px;
+    border-radius: 6px;
     font-family: 'Avenir Medium';
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
     cursor: pointer;
     outline: none;
+    padding: 4px 12px;
 }
 .settingsAuthAccountLogOut:hover,
 .settingsAuthAccountLogOut:focus {
-    box-shadow: 0px 0px 20px rgb(241, 55, 55);
-    background: rgba(241, 55, 55, 0.25);
+    background: rgba(241, 55, 55, 0.2);
+    border-color: rgba(241, 55, 55, 0.5);
 }
 .settingsAuthAccountLogOut:active {
-    box-shadow: 0px 0px 20px rgb(185, 47, 47);
-    background: rgba(185, 47, 47, 0.25);
-    border: 1px solid rgb(185, 47, 47);
-    color: rgb(185, 47, 47);
+    background: rgba(185, 47, 47, 0.15);
 }
 .settingsAuthAccount:hover .settingsAuthAccountLogOut {
     opacity: 1;
@@ -2007,18 +2270,23 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Main container for memory management. */
 #settingsMemoryContainer {
-    width: 75%;
+    width: 90%;
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.50);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 20px;
     margin-bottom: 20px;
 }
 
 /* Memory management title. */
 #settingsMemoryTitle {
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 15px;
+    font-weight: 600;
 }
 
 /* Memory management content. */
@@ -2074,21 +2342,24 @@ input:checked + .toggleSwitchSlider:before {
     align-items: center;
 }
 .settingsMemoryStatusTitle {
-    font-size: 12px;
-    color: grey;
-    font-weight: bold;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .settingsMemoryStatusValue {
-    color: lightgrey;
-    font-size: 16px;
+    color: #ff6432;
+    font-size: 20px;
+    font-weight: 700;
 }
 
 /* Description for memory management. */
 #settingsMemoryDesc {
-    font-size: 10px;
-    margin: 20px 0px;
-    color: lightgrey;
-    font-weight: bold;
+    font-size: 11px;
+    margin: 16px 0px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
 }
 
 /* Status text which displays details on the selected executable. */
@@ -2487,11 +2758,129 @@ input:checked + .toggleSwitchSlider:before {
     display: inline-flex;
     width: 70%;
     height: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
 }
 #landingContainer > #upper > #right {
     display: inline-flex;
     width: 15%;
     height: 100%;
+}
+
+/* Server Browser Panel */
+#serverBrowserPanel {
+    width: 260px;
+    max-height: 340px;
+    background: rgba(13, 13, 26, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#serverBrowserHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Avenir Medium', sans-serif;
+    letter-spacing: 0.3px;
+}
+
+#serverBrowserList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 8px 10px;
+    overflow-y: auto;
+}
+
+.serverBrowserItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.serverBrowserItem:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.serverBrowserIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+    font-family: 'Avenir Medium', sans-serif;
+}
+
+.serverBrowserInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.serverBrowserName {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    font-family: 'Avenir Medium', sans-serif;
+}
+
+.serverBrowserIP {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    font-family: 'Avenir Book', sans-serif;
+}
+
+.serverBrowserBadge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.45);
+    font-family: 'Avenir Medium', sans-serif;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.serverBrowserBadgeFree {
+    background: rgba(255, 100, 50, 0.12);
+    color: #ff6432;
+}
+
+/* Scrollbar for server list */
+#serverBrowserList::-webkit-scrollbar {
+    width: 4px;
+}
+
+#serverBrowserList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#serverBrowserList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+#serverBrowserList::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* Lower content container. */
@@ -2986,13 +3375,13 @@ input:checked + .toggleSwitchSlider:before {
 
 /* User profile avatar container. */
 #avatarContainer {
-    border-radius: 50%;
-    border: 2px solid #cad7e1;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 100, 50, 0.3);
     box-sizing: border-box;
-    background: rgba(1, 2, 1, 0.5);
+    background: rgba(13, 13, 26, 0.7);
     height: 70px;
     width: 70px;
-    box-shadow: 0px 0px 10px 0px rgb(0, 0, 0);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 100, 50, 0.1);
     overflow: hidden;
     position: relative;
     background-position: center;
@@ -3411,29 +3800,35 @@ input:checked + .toggleSwitchSlider:before {
 
 /* The launch button. */
 #launch_button {
-    background: none;
+    background: linear-gradient(135deg, #ff6432, #ff8a50);
     border: none;
     cursor: pointer;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: 2px;
-    text-shadow: 0px 0px 0px #bebcbb;
-    font-size: 20px;
-    padding: 0px;
-    transition: 0.25s ease;
+    font-size: 16px;
+    padding: 12px 40px;
+    transition: all 0.25s ease;
     outline: none;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 4px 16px rgba(255, 100, 50, 0.3);
+    text-transform: uppercase;
 }
 #launch_button:hover,
 #launch_button:focus {
-    text-shadow: 0px 0px 20px #fff, 0px 0px 20px #fff;
+    box-shadow: 0 6px 24px rgba(255, 100, 50, 0.5);
+    transform: translateY(-2px);
 }
 #launch_button:active {
-    color: #c7c7c7;
-    text-shadow: 0px 0px 20px #c7c7c7, 0px 0px 20px #c7c7c7;
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 100, 50, 0.3);
 }
 #launch_button:disabled {
-    color: #c7c7c7;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.3);
     cursor: default;
     pointer-events: none;
+    box-shadow: none;
 }
 
 /* Launch details main container, hidden until launch processing begins. */
@@ -3450,9 +3845,9 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Span which displays percentage complete. */
 #launch_progress_label {
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: 1px;
-    text-shadow: 0px 0px 0px #bebcbb;
+    color: #ff6432;
     font-size: 20px;
     min-width: 53.21px;
     max-width: 53.21px;
@@ -3487,15 +3882,18 @@ input:checked + .toggleSwitchSlider:before {
 
 /* Progress bar styles. */
 #launch_progress[value] {
-    height: 3px;
+    height: 4px;
     width: 265px;
     -webkit-appearance: none;
+    border-radius: 4px;
 }
 #launch_progress[value]::-webkit-progress-bar {
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
 }
 #launch_progress[value]::-webkit-progress-value {
-    background-color: #fff;
+    background: linear-gradient(90deg, #ff6432, #ff8a50);
+    border-radius: 4px;
 }
 
 /* Span which displays information about the status of the launch process. */
@@ -3526,7 +3924,7 @@ input:checked + .toggleSwitchSlider:before {
     justify-content: center;
     width: 100%;
     height: calc(100% - 22px);
-    background: rgba(0, 0, 0, 0.50);
+    background: linear-gradient(135deg, rgba(13, 13, 26, 0.92) 0%, rgba(26, 26, 46, 0.92) 50%, rgba(22, 33, 62, 0.92) 100%);
 }
 
 /* Main overlay content. */
@@ -4175,18 +4573,19 @@ input:checked + .toggleSwitchSlider:before {
     z-index: 5;
 }
 
-/* ---- Left panel (white/light sidebar like SKlauncher) ---- */
+/* ---- Left panel (dark sidebar matching theme) ---- */
 #offlineLeft {
-    width: 240px;
-    min-width: 240px;
+    width: 280px;
+    min-width: 280px;
     height: 100%;
-    background: #f5f5f5;
+    background: linear-gradient(180deg, #0d0d1a 0%, #1a1a2e 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     z-index: 2;
-    box-shadow: 2px 0 12px rgba(0,0,0,0.18);
+    box-shadow: 2px 0 24px rgba(0,0,0,0.3);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 #offlineLeftContent {
@@ -4220,17 +4619,17 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #offlineBrandName {
-    font-family: 'Avenir Heavy', sans-serif;
-    font-size: 18px;
-    font-weight: 900;
-    color: #1a1a2e;
-    letter-spacing: 1px;
+    font-family: 'Avenir Medium', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
 }
 
 #offlineBrandSub {
     font-family: 'Avenir Book', sans-serif;
     font-size: 10px;
-    color: #666;
+    color: rgba(255, 255, 255, 0.4);
     letter-spacing: 2px;
     text-transform: uppercase;
 }
@@ -4251,25 +4650,30 @@ input:checked + .toggleSwitchSlider:before {
 
 .offlineField {
     width: 100%;
-    padding: 9px 12px;
-    border: 1.5px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     font-size: 13px;
     font-family: 'Avenir Book', sans-serif;
-    color: #222;
-    background: #fff;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
     outline: none;
     box-sizing: border-box;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .offlineField:focus {
-    border-color: #2196f3;
+    border-color: rgba(255, 100, 50, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.offlineField::placeholder {
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .offlineError {
     font-size: 10px;
-    color: #e53935;
+    color: #ff6432;
     font-family: 'Avenir Book', sans-serif;
     padding-left: 2px;
 }
@@ -4279,7 +4683,7 @@ input:checked + .toggleSwitchSlider:before {
     align-items: center;
     gap: 5px;
     font-size: 11px;
-    color: #2196f3;
+    color: #ff6432;
     text-decoration: none;
     font-family: 'Avenir Book', sans-serif;
     padding-left: 2px;
@@ -4287,31 +4691,35 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #offlineBuyLink:hover {
-    color: #1565c0;
+    color: #ff8a50;
     text-decoration: underline;
 }
 
 #offlineLoginButton {
     width: 100%;
-    padding: 10px;
-    background: #2196f3;
+    padding: 12px;
+    background: linear-gradient(135deg, #ff6432, #ff8a50);
     color: #fff;
     border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    font-family: 'Avenir Heavy', sans-serif;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Avenir Medium', sans-serif;
+    font-weight: 600;
     letter-spacing: 0.5px;
     cursor: pointer;
-    transition: background 0.2s ease, opacity 0.2s ease;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(255, 100, 50, 0.3);
 }
 
 #offlineLoginButton:hover:not(:disabled) {
-    background: #1976d2;
+    box-shadow: 0 6px 24px rgba(255, 100, 50, 0.5);
+    transform: translateY(-1px);
 }
 
 #offlineLoginButton:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
 /* Switch to online mode */
@@ -4324,7 +4732,7 @@ input:checked + .toggleSwitchSlider:before {
 #offlineSwitchOnline {
     background: none;
     border: none;
-    color: #555;
+    color: rgba(255, 255, 255, 0.45);
     font-size: 11px;
     font-family: 'Avenir Book', sans-serif;
     cursor: pointer;
@@ -4334,7 +4742,7 @@ input:checked + .toggleSwitchSlider:before {
 }
 
 #offlineSwitchOnline:hover {
-    color: #2196f3;
+    color: #ff6432;
 }
 
 /* ---- Right panel (background image) ---- */
@@ -4353,51 +4761,20 @@ input:checked + .toggleSwitchSlider:before {
     filter: brightness(0.85);
 }
 
-/* ---- Play Offline button on loginOptions ---- */
-#loginOptionOfflineContainer {
-    margin-top: 12px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.loginOptionOfflineButton {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 6px;
-    color: rgba(255,255,255,0.65);
-    font-size: 12px;
-    font-family: 'Avenir Book', sans-serif;
-    padding: 8px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    letter-spacing: 0.3px;
-}
-
-.loginOptionOfflineButton:hover {
-    background: rgba(255,255,255,0.13);
-    color: #fff;
-    border-color: rgba(255,255,255,0.35);
-}
-
-.loginOptionOfflineButton svg {
-    opacity: 0.7;
-}
+/* (offline button is now part of loginOptionCard layout) */
 
 
 /* ============================================================
-   EVO LAUNCHER — Custom Loading Screen (replaces Helios)
+   EVO LAUNCHER — Custom Loading Screen
    ============================================================ */
 
 #loadingContainer {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: #0d0d1a;
+    background: radial-gradient(ellipse at center bottom, #1a1020 0%, #0d0d1a 60%, #0a0a14 100%);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 9999;
@@ -4405,39 +4782,66 @@ input:checked + .toggleSwitchSlider:before {
 
 #loadingContent {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 24px;
 }
 
 #loadSpinnerContainer {
     position: relative;
-    width: 140px;
-    height: 140px;
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Spinning outer ring */
+/* App icon glow */
 #evoLoadRing {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-top-color: #4fc3f7;
-    border-right-color: #1565c0;
-    animation: evoSpin 1.2s linear infinite;
-    box-shadow: 0 0 18px rgba(79, 195, 247, 0.4);
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ff6432, #ff8a50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(255, 100, 50, 0.3), 0 0 80px rgba(255, 100, 50, 0.1);
+    animation: evoGlow 2s ease-in-out infinite alternate;
 }
 
 #evoLoadRing::before {
+    content: 'EVO';
+    font-family: 'Avenir Medium', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 2px;
+}
+
+@keyframes evoGlow {
+    0%   { box-shadow: 0 0 30px rgba(255, 100, 50, 0.2), 0 0 60px rgba(255, 100, 50, 0.05); }
+    100% { box-shadow: 0 0 50px rgba(255, 100, 50, 0.4), 0 0 100px rgba(255, 100, 50, 0.15); }
+}
+
+/* Loading spinner */
+#evoLoadCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 1;
+}
+
+#evoLoadCenter::before {
     content: '';
-    position: absolute;
-    inset: 8px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #ff6432;
     border-radius: 50%;
-    border: 2px solid transparent;
-    border-bottom-color: rgba(79, 195, 247, 0.4);
-    animation: evoSpin 1.8s linear infinite reverse;
+    animation: evoSpin 0.8s linear infinite;
 }
 
 @keyframes evoSpin {
@@ -4445,32 +4849,17 @@ input:checked + .toggleSwitchSlider:before {
     100% { transform: rotate(360deg); }
 }
 
-/* Center text */
-#evoLoadCenter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    gap: 2px;
-    z-index: 1;
-}
-
 #evoLoadName {
-    font-family: 'Avenir Heavy', sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #4fc3f7, #1565c0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 3px;
+    font-family: 'Avenir Medium', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 1px;
 }
 
 #evoLoadSub {
     font-family: 'Avenir Book', sans-serif;
-    font-size: 8px;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 4px;
-    text-transform: uppercase;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
 }
