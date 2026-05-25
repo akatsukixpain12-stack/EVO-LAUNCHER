@@ -65,7 +65,12 @@ async function showMainUI(data){
         ipcRenderer.send('autoUpdateAction', 'initAutoUpdater', ConfigManager.getAllowPrerelease())
     }
 
-    await prepareSettings(true)
+    try {
+        await prepareSettings(true)
+    } catch (err) {
+        console.error('Failed to prepare settings', err)
+        // Continue loading even if settings fail to ensure the UI shows
+    }
 
     // data may be null if distribution failed to load â€” handle gracefully
     if(data) {

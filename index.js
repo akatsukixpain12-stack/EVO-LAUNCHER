@@ -101,7 +101,8 @@ async function postJson(url, json) {
         body: JSON.stringify(json)
     })
 
-    const isJson = response.headers.get('content-type')?.includes('application/json')
+    const contentType = response.headers.get('content-type')
+    const isJson = contentType && contentType.includes('application/json')
     const data = isJson ? await response.json() : await response.text()
 
     if (!response.ok) {

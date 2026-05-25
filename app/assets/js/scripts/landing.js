@@ -977,8 +977,15 @@ async function loadNews(){
         })
         .then(data => {
             clearTimeout(timeoutId)
-                const xml = $.parseXML(data)
-                const items = $(xml).find('item')
+                let items = []
+                try {
+                    const xml = $.parseXML(data)
+                    items = $(xml).find('item')
+                } catch (e) {
+                    loggerLanding.error('Error parsing news XML', e)
+                    return { articles: null }
+                }
+
                 const articles = []
 
                 for(let i=0; i<items.length; i++){
