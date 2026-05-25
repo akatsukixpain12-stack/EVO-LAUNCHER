@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=35&pause=1000&color=0078D4&center=true&vCenter=true&width=435&lines=EVO+LAUNCHER;MINECRAFT+EDITION" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=35&pause=1000&color=0078D4&center=true&vCenter=true&width=550&lines=EVO+LAUNCHER+STYLISH;MINECRAFT+EDITION" alt="Typing SVG" />
 </p>
 
 <p align="center">

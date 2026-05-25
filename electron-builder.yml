@@ -1,6 +1,6 @@
 appId: 'evolauncher'
-productName: 'EVO LAUNCHER'
-artifactName: 'EVO-Launcher-Setup-${version}.${ext}'
+productName: 'EVO LAUNCHER STYLISH'
+artifactName: 'EVO-Launcher-Stylish-Setup-${version}.${ext}'
 
 publish:
   provider: github
@@ -35,7 +35,9 @@ nsis:
   allowToChangeInstallationDirectory: true
   installerIcon: 'app/assets/images/SealCircle.ico'
   uninstallerIcon: 'app/assets/images/SealCircle.ico'
-  uninstallDisplayName: 'EVO LAUNCHER'
+  installerHeader: 'app/assets/images/EvoLogo.png'
+  installerSidebar: 'app/assets/images/EvoLogo.png'
+  uninstallDisplayName: 'EVO LAUNCHER STYLISH'
   runAfterFinish: true
   createDesktopShortcut: true
 
