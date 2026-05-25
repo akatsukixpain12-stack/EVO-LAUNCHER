@@ -26,7 +26,7 @@ jobs:
         run: npm ci
 
       - name: Build Windows Installer
-        run: npm run dist -- -w --x64
+        run: npm run dist -- -w --x64 --publish never
 
   release-android:
     permissions:
