@@ -8,6 +8,7 @@ const ejse = require('ejs-electron')
 const fs = require('fs')
 const isDev = require('./app/assets/js/isdev')
 const path = require('path')
+
 const crypto = require('crypto')
 
 const { pathToFileURL } = require('url')
@@ -90,6 +91,11 @@ ipcMain.on('autoUpdateAction', (event, arg, data) => {
     }
 })
 
+// Forward distribution index status from preloader back to renderer.
+ipcMain.on('distributionIndexDone', (event, res) => {
+    event.sender.send('distributionIndexDone', res)
+})
+
 // ==================== ELY.BY LOGIN ====================
 
 async function postJson(url, json) {
@@ -125,6 +131,7 @@ ipcMain.handle('elyby-login', async (event, username, password) => {
                 requestUser: true
             }
         )
+
 
         return {
             success: true,

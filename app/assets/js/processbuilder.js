@@ -8,10 +8,14 @@ const { Type }              = require('helios-distribution-types')
 const os                    = require('os')
 const path                  = require('path')
 
+const { downloadFile }         = require('helios-core/dl')
 const ConfigManager            = require('./configmanager')
 const { getPerfJVMOptions } = require('./configmanager')
 
 const logger = LoggerUtil.getLogger('ProcessBuilder')
+
+const AUTHLIB_INJECTOR_URL = 'https://github.com/yushijinhun/authlib-injector/releases/download/v1.2.5/authlib-injector-1.2.5.jar'
+const AUTHLIB_INJECTOR_FILENAME = 'authlib-injector-1.2.5.jar'
 
 
 /**
@@ -43,9 +47,27 @@ class ProcessBuilder {
     }
     
     /**
-     * Convienence method to run the functions typically used to build a process.
+     * Ensure authlib-injector is available locally. Download if missing.
+     * 
+     * @returns {Promise.<string>} Path to the authlib-injector jar.
      */
-    build(){
+    async ensureAuthlibInjector(){
+        const dir = path.join(ConfigManager.getCommonDirectory(), 'authlib-injector')
+        fs.ensureDirSync(dir)
+        const jarPath = path.join(dir, AUTHLIB_INJECTOR_FILENAME)
+        if(!fs.existsSync(jarPath)){
+            logger.info('Downloading authlib-injector...')
+            await downloadFile(AUTHLIB_INJECTOR_URL, jarPath)
+            logger.info('authlib-injector downloaded.')
+        }
+        return jarPath
+    }
+
+    /**
+     * Convienence method to run the functions typically used to build a process.
+     * @param {string} [authlibInjectorPath] Path to authlib-injector jar for Ely.by accounts.
+     */
+    build(authlibInjectorPath){
         fs.ensureDirSync(this.gameDir)
         const tempNativePath = path.join(os.tmpdir(), ConfigManager.getTempNativeFolder(), crypto.pseudoRandomBytes(16).toString('hex'))
         process.throwDeprecation = true
@@ -70,6 +92,11 @@ class ProcessBuilder {
         if(mcVersionAtLeast('1.13', this.server.rawServer.minecraftVersion)){
             //args = args.concat(this.constructModArguments(modObj.fMods))
             args = args.concat(this.constructModList(modObj.fMods))
+        }
+
+        // Inject authlib-injector for Ely.by accounts
+        if(this.authUser.type === 'elyby' && authlibInjectorPath){
+            args.unshift(`-javaagent:${authlibInjectorPath}=ely.by`)
         }
 
         // Hide access token

@@ -390,6 +390,16 @@ document.getElementById('settingsAddMicrosoftAccount').onclick = (e) => {
     })
 }
 
+// Bind the add Ely.by account button.
+document.getElementById('settingsAddElyByAccount').onclick = (e) => {
+    switchView(getCurrentView(), VIEWS.login, 500, 500, () => {
+        loginViewOnCancel = VIEWS.settings
+        loginViewOnSuccess = VIEWS.settings
+        loginViewAuthMode = 'elyby'
+        loginCancelEnabled(true)
+    })
+}
+
 // Bind reply for Microsoft Login.
 ipcRenderer.on(MSFT_OPCODE.REPLY_LOGIN, (_, ...arguments_) => {
     if (arguments_[0] === MSFT_REPLY_TYPE.ERROR) {
@@ -576,7 +586,15 @@ function processLogOut(val, isLastAccount){
             refreshAuthAccountSelected(selAcc.uuid)
             updateSelectedAccount(selAcc)
         }
-        prepareAccountsTab()
+        if(isLastAccount) {
+            loginOptionsCancelEnabled(false)
+            loginOptionsViewOnLoginSuccess = VIEWS.settings
+            loginOptionsViewOnLoginCancel = VIEWS.loginOptions
+            switchView(getCurrentView(), VIEWS.loginOptions)
+        }
+        $(parent).fadeOut(250, () => {
+            parent.remove()
+        })
     } else {
         AuthManager.removeMojangAccount(uuid).then(() => {
             if(!isLastAccount && uuid === prevSelAcc.uuid){

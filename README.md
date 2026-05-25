@@ -1,75 +1,83 @@
 <p align="center">
-  <img src="app/assets/images/EvoLogo.png" width="250px" alt="EVO Launcher">
+  <img src="app/assets/images/SealCircle.png" width="150px" alt="EVO LAUNCHER">
 </p>
+
+<h1 align="center">EVO LAUNCHER</h1>
+
+<p align="center">Free, open-source Minecraft launcher with Microsoft, Ely.by, and Offline authentication.<br>Modern dark UI, built-in mod management, and FPS optimization.</p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=700&size=35&pause=1000&color=0078D4&center=true&vCenter=true&width=550&lines=EVO+LAUNCHER+STYLISH;MINECRAFT+EDITION" alt="Typing SVG" />
+  <a href="https://akatsukixpain12-stack.github.io/EVO-LAUNCHER/">Website</a> •
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases">Download</a> •
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/issues">Issues</a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest">
-    <img src="https://img.shields.io/badge/ALL-RELEASES-grey?style=for-the-badge&logo=github" height="45">
-  </a>
-  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest">
-    <img src="https://img.shields.io/badge/MOBILE-APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" height="45">
-  </a>
-</p>
+---
 
-<p align="center">The next-generation modded Minecraft launcher â€” built for performance, style, and control.</p>
+## Download
+
+Download the latest installer from the [Releases](https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases) page or visit the [website](https://akatsukixpain12-stack.github.io/EVO-LAUNCHER/):
+
+| Platform | File |
+| -------- | ---- |
+| Windows x64 | `EVO LAUNCHER-setup-X.X.X.exe` |
+| macOS x64 | `EVO LAUNCHER-setup-X.X.X-x64.dmg` |
+| macOS arm64 | `EVO LAUNCHER-setup-X.X.X-arm64.dmg` |
+| Linux x64 | `EVO LAUNCHER-setup-X.X.X.AppImage` |
 
 ---
 
 ## Features
 
-* ðŸ”’ **Full Account Management** â€” Microsoft (OAuth 2.0) + Mojang authentication. Switch accounts instantly.
-* ðŸ“‚ **Smart Asset Management** â€” Auto-downloads and validates all mods and files before launch.
-* â˜• **Automatic Java** â€” Detects and installs the right Java version for you.
-* âš¡ **Performance Settings** â€” Motion blur, FPS boost presets, entity culling, fast render, smooth FPS, FPS cap.
-* ðŸ“° **Built-in News Feed** â€” Stay updated without leaving the launcher.
-* ðŸ”„ **Auto-Updates** â€” The launcher keeps itself current.
-* ðŸŒ **Mojang Status Monitor** â€” Live service status built in.
+* **4 Authentication Methods** — Microsoft (OAuth 2.0), Mojang, Ely.by (free), and Offline mode
+* **Ely.by Authentication** — Play using your free Ely.by account with full skin support via authlib-injector
+* **Offline Mode** — Play without any account using a local username
+* **Modern Dark UI** — FastClient-inspired dark theme with orange accent colors
+* **Smart Asset Management** — Auto-downloads and validates all mods and files before launch
+* **Automatic Java** — Detects and installs the right Java version for you
+* **Built-in News Feed** — Stay updated without leaving the launcher
+* **Auto-Updates** — The launcher keeps itself current
+* **Mojang Status Monitor** — Live service status built in
+* **Cross-Platform** — Windows, macOS, and Linux support
 
 ---
 
-## Installation
+## Authentication Options
+
+### Microsoft (OAuth 2.0)
+Login with your Microsoft account to play with your official Minecraft profile.
+
+### Ely.by (Free)
+Login with your [Ely.by](https://ely.by/) account. Ely.by provides free Minecraft accounts with full skin support. The launcher automatically downloads and injects [authlib-injector](https://github.com/yushijinhun/authlib-injector) to authenticate with the Ely.by auth server.
+
+### Mojang (Legacy)
+Login with a Mojang account (email + password).
+
+### Offline Mode
+Play without any authentication. Just enter a username and go.
+
+---
+
+## Development Setup
 
 ### Requirements
 
-* [Node.js v22](https://nodejs.org/) â€” download and install before anything else.
-* [Git](https://git-scm.com/) â€” needed to clone the repo.
-* npm (comes with Node.js)
+* [Node.js v22](https://nodejs.org/)
+* [Git](https://git-scm.com/)
 
----
-
-### Step 1 â€” Clone the repo
+### Quick Start
 
 ```console
 git clone https://github.com/akatsukixpain12-stack/EVO-LAUNCHER.git
 cd EVO-LAUNCHER
-```
-
-### Step 2 â€” Install dependencies
-
-```console
 npm install
-```
-
-### Step 3 â€” Run in development mode
-
-```console
 npm start
 ```
 
-The launcher window will open. That's it.
-
----
-
-### Step 4 â€” Build an installer (optional)
-
-To build a distributable installer for your platform:
+### Build Installer
 
 ```console
-# Windows (.exe installer)
+# Windows (.exe)
 npm run dist:win
 
 # macOS (.dmg)
@@ -79,25 +87,20 @@ npm run dist:mac
 npm run dist:linux
 ```
 
-The output will be in the `dist/` folder.
-
-| Platform | Output file |
-| -------- | ----------- |
-| Windows x64 | `dist/EVO Launcher-setup-2.2.1.exe` |
-| macOS x64 | `dist/EVO Launcher-setup-2.2.1-x64.dmg` |
-| macOS arm64 | `dist/EVO Launcher-setup-2.2.1-arm64.dmg` |
-| Android APK | `dist/EVO-Launcher-v2.2.1.apk` |
-| Linux x64 | `dist/EVO Launcher-setup-2.2.1.AppImage` |
+Output goes to `dist/`.
 
 ---
 
-## Adding Your Logo
+## Creating a Release
 
-Place your logo file at:
+Push a version tag to trigger the GitHub Actions release workflow:
+
+```console
+git tag v2.3.0
+git push origin v2.3.0
 ```
-app/assets/images/EvoLogo.png
-```
-Also copy it to `build/icon.png` â€” this is used for the installer icon.
+
+This automatically builds installers for Windows, macOS, and Linux and publishes them as a GitHub Release.
 
 ---
 
@@ -109,19 +112,6 @@ Ctrl + Shift + I
 
 ---
 
-## Performance Tab
-
-Open Settings â†’ **âš¡ Performance** to access:
-
-- **Motion Blur** with intensity slider
-- **FPS Boost** with Balanced / Performance / Max FPS presets
-- **Entity Culling** â€” skip off-screen entities
-- **Fast Render** â€” reduce GPU overhead
-- **Smooth FPS** â€” eliminate frame stutters
-- **FPS Cap** â€” limit max FPS (30â€“300)
-
----
-
 ## License
 
-UNLICENSED â€” All rights reserved Â© EVO Launcher
+UNLICENSED — All rights reserved © EVO LAUNCHER

@@ -207,6 +207,23 @@ exports.addElyByAccount = async function(username, password) {
     }
 }
 
+/**
+ * Remove an Ely.by account from the database.
+ * 
+ * @param {string} uuid The UUID of the account to be removed.
+ * @returns {Promise.<void>} Promise which resolves to void when the action is complete.
+ */
+exports.removeElyByAccount = async function(uuid){
+    try {
+        ConfigManager.removeAuthAccount(uuid)
+        ConfigManager.save()
+        return Promise.resolve()
+    } catch (err){
+        log.error('Error while removing Ely.by account', err)
+        return Promise.reject(err)
+    }
+}
+
 const AUTH_MODE = { FULL: 0, MS_REFRESH: 1, MC_REFRESH: 2 }
 
 /**
@@ -502,7 +519,7 @@ async function validateSelectedElyByAccount(){
 exports.validateSelected = async function(){
     const current = ConfigManager.getSelectedAccount()
 
-    if(current == null || current.type === 'offline'){
+    if(current == null || current.type === 'offline' || current.type === 'elyby'){
         return true
     }
 

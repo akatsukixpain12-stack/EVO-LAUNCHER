@@ -164,6 +164,7 @@ function syncLoginViewMode(){
 let loginViewOnSuccess = VIEWS.landing
 let loginViewOnCancel = VIEWS.settings
 let loginViewCancelHandler
+let loginViewAuthMode = 'mojang'
 
 function loginCancelEnabled(val){
     if(val){
