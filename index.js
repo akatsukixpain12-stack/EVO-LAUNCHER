@@ -8,7 +8,6 @@ const ejse = require('ejs-electron')
 const fs = require('fs')
 const isDev = require('./app/assets/js/isdev')
 const path = require('path')
-const axios = require('axios')
 const crypto = require('crypto')
 
 const { pathToFileURL } = require('url')
@@ -94,17 +93,21 @@ ipcMain.on('autoUpdateAction', (event, arg, data) => {
 // ==================== ELY.BY LOGIN ====================
 
 async function postJson(url, json) {
-    try {
-        const response = await axios.post(url, json)
-        return response.data
-    } catch(err) {
-        const errorData = err.response?.data
-        throw new Error(
-            typeof errorData === 'string'
-                ? errorData
-                : JSON.stringify(errorData || err.message)
-        )
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json)
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(typeof data === 'string' ? data : JSON.stringify(data))
     }
+
+    return data
 }
 
 ipcMain.handle('elyby-login', async (event, username, password) => {

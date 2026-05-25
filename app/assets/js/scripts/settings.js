@@ -2,7 +2,6 @@
 const os     = require('os')
 const path   = require('path')
 const semver = require('semver')
-const axios  = require('axios')
 
 const DropinModUtil  = require('./assets/js/dropinmodutil')
 const ConfigManager  = require('../configmanager')
@@ -948,11 +947,14 @@ function parseModrinthProjectSlug(input){
 }
 
 async function downloadRemoteMod(url, suggestedName){
-    const response = await axios.get(url, { responseType: 'arraybuffer' })
+    const response = await fetch(url)
+    if(!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+    
+    const bufferData = await response.arrayBuffer()
 
     const urlPathName = (() => {
         try {
-            return new URL(response.request.responseURL || url).pathname
+            return new URL(response.url).pathname
         } catch(_err) {
             return ''
         }
@@ -965,7 +967,7 @@ async function downloadRemoteMod(url, suggestedName){
         throw new Error('unsupported-file-type')
     }
 
-    const buffer = Buffer.from(response.data)
+    const buffer = Buffer.from(bufferData)
     DropinModUtil.writeDropinMod(buffer, fileName, CACHE_SETTINGS_MODS_DIR)
 
     return fileName
@@ -994,8 +996,8 @@ async function importFromModrinth(){
     })
 
     try {
-        let res = await axios.get(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${params.toString()}`)
-        let versions = res.data
+        let res = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${params.toString()}`)
+        let versions = await res.json()
 
         if(!Array.isArray(versions) || versions.length === 0){
             const fallbackParams = new URLSearchParams({
@@ -1003,8 +1005,8 @@ async function importFromModrinth(){
                 game_versions: JSON.stringify([serv.rawServer.minecraftVersion]),
                 include_changelog: 'false'
             })
-            res = await axios.get(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
-            versions = res.data
+            res = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
+            versions = await res.json()
         }
 
         if(!Array.isArray(versions) || versions.length === 0){
@@ -1674,12 +1676,16 @@ function populateAboutVersionInformation(){
  * of the current version. This value is displayed on the UI.
  */
 function populateReleaseNotes(){
-    axios.get('https://github.com/dscalzi/HeliosLauncher/releases.atom', { timeout: 2500 })
-        .then(response => {
-            const data = response.data
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 2500)
+
+    fetch('https://github.com/dscalzi/HeliosLauncher/releases.atom', { signal: controller.signal })
+        .then(response => response.text())
+        .then(data => {
+            clearTimeout(timeoutId)
             const version = 'v' + remote.app.getVersion()
             const entries = $(data).find('entry')
-            
+
             for(let i=0; i<entries.length; i++){
                 const entry = $(entries[i])
                 let id = entry.find('id').text()
@@ -1842,7 +1848,7 @@ function bindPerfToggle(toggleId, statusId, settingKey, sliderRowId = null) {
     }
     toggle.addEventListener('change', () => {
         // Use ConfigManager setter directly
-        ConfigManager'set' + settingKey
+        ConfigManager['set' + settingKey](toggle.checked)
         ConfigManager.save()
         updatePerfStatus(statusId, toggle.checked)
         if (sliderRowId) {
