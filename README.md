@@ -1,9 +1,15 @@
 <p align="center">
-  <img src="C:\Users\HP\OneDrive\Desktop" width="300px" alt="EVO Launcher">
+  <img src="app/assets/images/EvoLogo.png" width="250px" alt="EVO Launcher">
 </p>
 
 <h1 align="center">EVO LAUNCHER</h1>
 <h3 align="center">Minecraft Edition</h3>
+
+<p align="center">
+  <a href="https://github.com/akatsukixpain12-stack/EVO-LAUNCHER/releases/latest">
+    <img src="https://img.shields.io/badge/Download-Windows_Installer-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Download for Windows">
+  </a>
+</p>
 
 <p align="center">The next-generation modded Minecraft launcher â€” built for performance, style, and control.</p>
 

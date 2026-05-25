@@ -1,6 +1,6 @@
 appId: 'evolauncher'
 productName: 'EVO Launcher'
-artifactName: '${productName}-setup-${version}.${ext}'
+artifactName: '${productName}-Installer-${version}.${ext}'
 
 publish:
   provider: github
