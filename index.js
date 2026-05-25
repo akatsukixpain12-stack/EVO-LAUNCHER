@@ -93,6 +93,11 @@ ipcMain.on('autoUpdateAction', (event, arg, data) => {
     }
 })
 
+// Forward distribution index status from preloader back to renderer.
+ipcMain.on('distributionIndexDone', (event, res) => {
+    event.sender.send('distributionIndexDone', res)
+})
+
 // ==================== ELY.BY LOGIN ====================
 
 ipcMain.handle('elyby-login', async (event, username, password) => {
