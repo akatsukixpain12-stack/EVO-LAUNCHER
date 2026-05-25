@@ -7,7 +7,7 @@ publish:
   owner: akatsukixpain12-stack
   repo: EVO-LAUNCHER
 
-copyright: 'Copyright © 2024-2026 EVO Launcher'
+copyright: 'Copyright (c) 2024-2026 EVO Launcher'
 
 asar: true
 compression: 'normal'
@@ -18,16 +18,13 @@ files:
 extraResources:
   - 'libraries'
 
-# Windows Configuration
 win:
   icon: 'app/assets/images/SealCircle.ico'
   publisherName: 'EVO Launcher Team'
-  legalCopyright: 'Copyright © 2024-2026 EVO Launcher'
-  target: 
+  target:
     - target: 'nsis'
       arch: 'x64'
 
-# Windows Installer Configuration
 nsis:
   oneClick: false
   perMachine: true
@@ -35,13 +32,10 @@ nsis:
   allowToChangeInstallationDirectory: true
   installerIcon: 'app/assets/images/SealCircle.ico'
   uninstallerIcon: 'app/assets/images/SealCircle.ico'
-  installerHeader: 'app/assets/images/EvoLogo.png'
-  installerSidebar: 'app/assets/images/EvoLogo.png'
   uninstallDisplayName: 'EVO LAUNCHER STYLISH'
   runAfterFinish: true
   createDesktopShortcut: true
 
-# macOS Configuration
 mac:
   icon: 'app/assets/images/SealCircle.png'
   target:
@@ -52,16 +46,14 @@ mac:
   artifactName: '${productName}-setup-${version}-${arch}.${ext}'
   category: 'public.app-category.games'
 
-# Linux Configuration
 linux:
   icon: 'app/assets/images/SealCircle.png'
   target: 'AppImage'
   maintainer: 'EVO Launcher'
   vendor: 'EVO Launcher'
-  synopsis: 'EVO Launcher â€” Modded Minecraft Launcher'
+  synopsis: 'EVO Launcher - Modded Minecraft Launcher'
   description: 'Custom launcher which allows users to join modded servers. All mods, configurations, and updates are handled automatically.'
   category: 'Game'
-
 
 directories:
   buildResources: 'build'
