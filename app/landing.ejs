@@ -1,4 +1,24 @@
 <div id="landingContainer" style="display: none;">
+    <aside class="evo-sidebar">
+        <div class="evo-brand">
+            <div class="evo-brand-mark">E</div>
+            <div>
+                <strong>EVO</strong>
+                <span>LAUNCHER</span>
+            </div>
+        </div>
+        <nav class="evo-nav" aria-label="Launcher navigation">
+            <button class="evo-nav-item active" type="button"><span class="evo-nav-icon">⌂</span>Home</button>
+            <button class="evo-nav-item" type="button" id="evoNavServers"><span class="evo-nav-icon">◉</span>Servers</button>
+            <button class="evo-nav-item" type="button"><span class="evo-nav-icon">▦</span>Instances</button>
+            <button class="evo-nav-item" type="button"><span class="evo-nav-icon">♧</span>Cosmetics</button>
+        </nav>
+        <div class="evo-sidebar-bottom">
+            <div class="evo-online-dot"><span></span> Services online</div>
+            <button class="evo-nav-item evo-settings-link" type="button"><span class="evo-nav-icon">⚙</span>Settings</button>
+            <span class="evo-version">EVO v2.2.1</span>
+        </div>
+    </aside>
     <div id="upper">
         <div id="left">
             <div id="image_seal_container">
@@ -7,6 +27,35 @@
             </div>
         </div>
         <div id="content">
+            <div class="evo-dashboard">
+                <div class="evo-welcome-row">
+                    <div>
+                        <span class="evo-eyebrow">WELCOME BACK, PLAYER</span>
+                        <h1>Ready to enter<br><em>your world?</em></h1>
+                        <p>Optimized performance. Zero distractions. Just play.</p>
+                    </div>
+                    <div class="evo-header-chip"><span class="evo-live-pulse"></span> ALL SYSTEMS NOMINAL</div>
+                </div>
+                <div class="evo-feature-grid">
+                    <div class="evo-feature-card evo-feature-main">
+                        <div class="evo-feature-image"></div>
+                        <div class="evo-feature-copy">
+                            <span class="evo-card-kicker">FEATURED INSTANCE</span>
+                            <strong>Survival SMP</strong>
+                            <span class="evo-card-meta">Fabric 1.21.1 &nbsp; • &nbsp; 12 mods installed</span>
+                            <div class="evo-card-tags"><span>PERFORMANCE</span><span>NEW</span></div>
+                        </div>
+                    </div>
+                    <div class="evo-stat-card"><span class="evo-stat-icon">⚡</span><strong>+42%</strong><small>FPS BOOST</small><span class="evo-stat-note">EVO performance stack active</span></div>
+                    <div class="evo-stat-card"><span class="evo-stat-icon purple">◈</span><strong>12</strong><small>MODS READY</small><span class="evo-stat-note">All dependencies synced</span></div>
+                </div>
+                <div class="evo-quick-row">
+                    <span class="evo-section-label">QUICK ACCESS</span>
+                    <button type="button" class="evo-quick-card" id="evoQuickMods"><span>▣</span><b>Mod manager</b><small>Manage your loadout</small><i>›</i></button>
+                    <button type="button" class="evo-quick-card" id="evoQuickOptimize"><span>✦</span><b>Optimize</b><small>Boost your performance</small><i>›</i></button>
+                    <button type="button" class="evo-quick-card" id="evoQuickServers"><span>◉</span><b>Servers</b><small>Find your next adventure</small><i>›</i></button>
+                </div>
+            </div>
         </div>
         <div id="right">
             <div id="rightContainer">
@@ -141,7 +190,8 @@
         <div id="right">
             <div class="bot_wrapper">
                 <div id="launch_content">
-                    <button id="launch_button"><%- lang('landing.launchButton') %></button>
+                    <div class="evo-launch-copy"><span class="evo-launch-label">SELECTED INSTANCE</span><strong id="evoInstanceName">SURVIVAL SMP</strong></div>
+                    <button id="launch_button"><span class="evo-play-icon">▶</span><span><%- lang('landing.launchButton') %><small>Start your adventure</small></span></button>
                     <div class="bot_divider"></div>
                     <button id="server_selection_button" class="bot_label"><%- lang('landing.launchButtonPlaceholder') %></button>
                 </div>

@@ -4474,3 +4474,131 @@ input:checked + .toggleSwitchSlider:before {
     letter-spacing: 4px;
     text-transform: uppercase;
 }
+
+/* ============================================================
+   EVO LAUNCHER — Fast client landing dashboard
+   ============================================================ */
+#landingContainer {
+    background: linear-gradient(120deg, rgba(8, 13, 26, 0.96), rgba(13, 22, 43, 0.68));
+    overflow: hidden;
+}
+#landingContainer > #upper {
+    height: 75%;
+    margin-left: 92px;
+    width: calc(100% - 92px);
+}
+#landingContainer > #upper > #left {
+    width: 0;
+    overflow: hidden;
+}
+#landingContainer > #upper > #content {
+    width: calc(100% - 250px);
+    align-items: flex-start;
+}
+#landingContainer > #upper > #right {
+    width: 250px;
+}
+#landingContainer > #lower {
+    height: 25%;
+    margin-left: 92px;
+    width: calc(100% - 92px);
+    background: linear-gradient(to top, rgba(5, 9, 19, 0.98), rgba(5, 9, 19, 0.15));
+    align-items: center;
+}
+#landingContainer > #lower > #left { width: 28%; }
+#landingContainer > #lower > #center { width: 22%; }
+#landingContainer > #lower > #right { width: 50%; }
+.evo-sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 92px;
+    z-index: 20;
+    box-sizing: border-box;
+    padding: 27px 12px 18px;
+    background: rgba(7, 12, 25, 0.88);
+    border-right: 1px solid rgba(148, 174, 216, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.evo-brand { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.evo-brand-mark {
+    width: 35px; height: 35px; border-radius: 11px;
+    display: grid; place-items: center;
+    color: #07101f; background: linear-gradient(135deg, #70e1ff, #557cff);
+    font: 900 21px 'Avenir Heavy'; box-shadow: 0 5px 18px rgba(76, 151, 255, .35);
+}
+.evo-brand strong { display: block; color: #fff; font: 900 12px 'Avenir Heavy'; letter-spacing: 2px; text-align: center; }
+.evo-brand span { display: block; color: rgba(191, 208, 238, .55); font: 7px 'Avenir Medium'; letter-spacing: 1.5px; text-align: center; }
+.evo-nav { width: 100%; margin-top: 45px; display: flex; flex-direction: column; gap: 9px; }
+.evo-nav-item {
+    width: 100%; height: 58px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+    border: 1px solid transparent; border-radius: 12px; background: transparent; color: rgba(177, 195, 226, .56);
+    font: 9px 'Avenir Medium'; letter-spacing: .2px; cursor: pointer; transition: .2s ease;
+}
+.evo-nav-item:hover, .evo-nav-item.active { color: #fff; background: rgba(93, 133, 224, .18); border-color: rgba(113, 164, 255, .2); }
+.evo-nav-item.active { box-shadow: inset 3px 0 #6edcff, 0 4px 16px rgba(39, 83, 173, .12); }
+.evo-nav-icon { font: 19px 'Avenir Medium'; line-height: 1; color: #7fdcff; }
+.evo-sidebar-bottom { margin-top: auto; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.evo-online-dot { color: rgba(187, 207, 238, .55); font: 8px 'Avenir Medium'; white-space: nowrap; transform: rotate(-90deg); position: absolute; bottom: 112px; }
+.evo-online-dot span { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #67e3a6; box-shadow: 0 0 8px #67e3a6; }
+.evo-settings-link { height: 45px; }
+.evo-version { color: rgba(177, 195, 226, .32); font: 8px 'Avenir Medium'; letter-spacing: .5px; }
+.evo-sidebar + #upper #externalMedia,
+#landingContainer #newsButton,
+#landingContainer #newsContainer { display: none !important; }
+.offlineModeNote { color: #777; font: 10px 'Avenir Book'; text-align: center; }
+.evo-dashboard { width: 100%; padding: 55px 18px 0 35px; box-sizing: border-box; }
+.evo-welcome-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.evo-eyebrow, .evo-section-label, .evo-card-kicker, .evo-launch-label { color: #6ddcff; font: 10px 'Avenir Heavy'; letter-spacing: 2px; }
+.evo-dashboard h1 { margin: 9px 0 9px; color: #fff; font: 900 clamp(27px, 3.5vw, 46px)/1.03 'Avenir Heavy'; letter-spacing: -1px; }
+.evo-dashboard h1 em { font-style: normal; color: #88aaff; }
+.evo-dashboard p { margin: 0; color: rgba(197, 210, 238, .58); font: 12px 'Avenir Book'; }
+.evo-header-chip { margin-top: 4px; padding: 9px 12px; border: 1px solid rgba(103, 227, 166, .22); border-radius: 20px; color: #80e9b1; font: 8px 'Avenir Heavy'; letter-spacing: 1px; }
+.evo-live-pulse { display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: #67e3a6; box-shadow: 0 0 8px #67e3a6; }
+.evo-feature-grid { display: grid; grid-template-columns: minmax(210px, 1.8fr) minmax(115px, .8fr) minmax(115px, .8fr); gap: 12px; margin-top: 32px; }
+.evo-feature-card, .evo-stat-card { min-height: 118px; border: 1px solid rgba(154, 184, 236, .14); border-radius: 14px; background: rgba(18, 31, 61, .66); box-shadow: 0 12px 28px rgba(0,0,0,.12); overflow: hidden; }
+.evo-feature-main { display: flex; position: relative; background: linear-gradient(110deg, rgba(19, 40, 83, .95), rgba(24, 44, 79, .45)); }
+.evo-feature-image { width: 38%; min-width: 80px; background: linear-gradient(145deg, rgba(94, 196, 255, .2), transparent), url('../images/backgrounds/3.jpg') center/cover; opacity: .8; }
+.evo-feature-copy { display: flex; flex-direction: column; padding: 18px 14px; gap: 6px; }
+.evo-feature-copy strong { color: #fff; font: 18px 'Avenir Heavy'; }
+.evo-card-meta, .evo-stat-note { color: rgba(196, 211, 239, .55); font: 9px 'Avenir Book'; }
+.evo-card-tags { display: flex; gap: 6px; margin-top: 5px; }
+.evo-card-tags span { border-radius: 4px; padding: 4px 6px; color: #8cddff; background: rgba(77, 171, 242, .13); font: 8px 'Avenir Heavy'; }
+.evo-card-tags span:last-child { color: #a9a4ff; background: rgba(143, 125, 255, .14); }
+.evo-stat-card { padding: 17px; box-sizing: border-box; display: flex; flex-direction: column; }
+.evo-stat-icon { color: #6edcff; font-size: 17px; margin-bottom: 8px; }
+.evo-stat-icon.purple { color: #aa9cff; }
+.evo-stat-card strong { color: #fff; font: 25px 'Avenir Heavy'; }
+.evo-stat-card small { margin-top: 1px; color: rgba(196, 211, 239, .58); font: 8px 'Avenir Heavy'; letter-spacing: 1px; }
+.evo-stat-note { margin-top: auto; font-size: 8px; }
+.evo-quick-row { display: flex; align-items: center; gap: 10px; margin-top: 22px; }
+.evo-quick-row .evo-section-label { margin-right: 5px; white-space: nowrap; color: rgba(201, 214, 241, .55); font-size: 8px; }
+.evo-quick-card { flex: 1; min-width: 0; position: relative; text-align: left; padding: 11px 25px 11px 32px; border: 1px solid rgba(154, 184, 236, .12); border-radius: 9px; background: rgba(18, 31, 61, .47); color: #fff; cursor: pointer; transition: .2s ease; }
+.evo-quick-card:hover { background: rgba(69, 110, 196, .3); border-color: rgba(122, 192, 255, .4); transform: translateY(-2px); }
+.evo-quick-card > span { position: absolute; left: 11px; top: 13px; color: #78dfff; font-size: 14px; }
+.evo-quick-card b { display: block; font: 10px 'Avenir Heavy'; }
+.evo-quick-card small { color: rgba(196, 211, 239, .5); font: 8px 'Avenir Book'; }
+.evo-quick-card i { position: absolute; right: 9px; top: 17px; color: rgba(255,255,255,.5); font-style: normal; font-size: 18px; }
+#landingContainer > #upper > #right #rightContainer { top: 55px; }
+#landingContainer > #upper > #right #user_content { padding: 8px; border: 1px solid rgba(154, 184, 236, .16); border-radius: 16px; background: rgba(10, 20, 43, .52); }
+#landingContainer > #upper > #right #avatarContainer { width: 48px; height: 48px; border-color: #6edcff; box-shadow: 0 0 18px rgba(90, 192, 255, .25); }
+#landingContainer > #upper > #right #user_text { right: 68px; font-size: 10px; }
+#landingContainer > #upper > #right #mediaContent { margin-top: 18px; opacity: .7; }
+#landingContainer > #lower > #right #launch_content { top: 0; align-items: center; }
+#launch_button { display: flex; align-items: center; gap: 10px; padding: 13px 23px; border: 1px solid rgba(139, 224, 255, .45); border-radius: 10px; background: linear-gradient(135deg, #4ec7ee, #536ee4); color: #fff; box-shadow: 0 8px 25px rgba(57, 145, 229, .28); text-shadow: none; font: 14px 'Avenir Heavy'; transition: .2s ease; }
+#launch_button:hover, #launch_button:focus { background: linear-gradient(135deg, #73dcfa, #6e87f3); transform: translateY(-2px); box-shadow: 0 11px 30px rgba(57, 145, 229, .42); text-shadow: none; }
+#launch_button small { display: block; margin-top: 3px; color: rgba(255,255,255,.7); font: 8px 'Avenir Book'; text-align: left; }
+.evo-play-icon { font-size: 15px; }
+.evo-launch-copy { display: flex; flex-direction: column; gap: 4px; margin-right: 16px; }
+.evo-launch-copy strong { color: #fff; font: 11px 'Avenir Heavy'; letter-spacing: .5px; }
+#server_selection_button { color: rgba(207, 220, 243, .62); }
+@media (max-width: 850px) {
+    .evo-dashboard { padding-left: 18px; }
+    .evo-feature-grid { grid-template-columns: 1fr 1fr; }
+    .evo-feature-main { grid-column: 1 / -1; }
+    .evo-quick-row .evo-section-label { display: none; }
+    .evo-quick-card { padding-left: 27px; }
+}
