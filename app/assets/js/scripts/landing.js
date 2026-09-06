@@ -133,6 +133,23 @@ document.getElementById('settingsMediaButton').onclick = async e => {
     switchView(getCurrentView(), VIEWS.settings)
 }
 
+// Dashboard shortcuts reuse the established launcher actions.
+document.querySelector('.evo-settings-link').onclick = () => {
+    document.getElementById('settingsMediaButton').click()
+}
+document.getElementById('evoNavServers').onclick = () => {
+    document.getElementById('server_selection_button').click()
+}
+document.getElementById('evoQuickServers').onclick = () => {
+    document.getElementById('server_selection_button').click()
+}
+document.getElementById('evoQuickMods').onclick = () => {
+    document.getElementById('settingsMediaButton').click()
+}
+document.getElementById('evoQuickOptimize').onclick = () => {
+    document.getElementById('settingsMediaButton').click()
+}
+
 // Bind avatar overlay button.
 document.getElementById('avatarOverlay').onclick = async e => {
     await prepareSettings()
