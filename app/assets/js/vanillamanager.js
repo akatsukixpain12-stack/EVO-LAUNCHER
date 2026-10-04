@@ -430,12 +430,17 @@ async function loadInstalledProfile(id) {
         ? (profile.inheritsFrom || id.substring('fabric-'.length))
         : (profile.id || id.substring('vanilla-'.length))
 
+    const localVanillaPath = path.join(commonRoot(), 'versions', mcVersion, `${mcVersion}.json`)
+    const vanillaManifest = await fs.pathExists(localVanillaPath)
+        ? fs.readJson(localVanillaPath)
+        : getVersion(mcVersion)
+
     return {
         id,
         version: mcVersion,
         loader: isFabric ? 'fabric' : 'vanilla',
         loaderVersion: null,
-        manifest: await getVersion(mcVersion),
+        manifest: await vanillaManifest,
         modManifest: profile
     }
 }
@@ -549,6 +554,8 @@ async function installFromUI(versionId, loader) {
             })
 
         updateLandingLabel(profile)
+        const launchButton = document.getElementById('launch_button')
+        if(launchButton) launchButton.disabled = false
         if(status) {
             status.textContent =
                 `${profile.loader === 'fabric' ? 'Fabric' : 'Minecraft'} ${profile.version} ready.`
@@ -561,6 +568,24 @@ async function installFromUI(versionId, loader) {
         showManagerError(err.message)
     } finally {
         buttons.forEach(button => { button.disabled = false })
+    }
+}
+
+async function restoreSelectedInstance(){
+    const id = ConfigManager.getSelectedVanillaVersion()
+    if(!id) return
+
+    try {
+        const profile = await loadInstalledProfile(id)
+        selectedProfile = profile
+        updateLandingLabel(profile)
+
+        const launchButton = document.getElementById('launch_button')
+        if(launchButton) launchButton.disabled = false
+    } catch(err) {
+        console.warn('[EVO Version Manager] Stored instance is unavailable:', err.message)
+        ConfigManager.setSelectedVanillaVersion(null)
+        ConfigManager.save()
     }
 }
 
@@ -595,7 +620,10 @@ function bindVersionManager() {
     if(quick) quick.onclick = openVersionManager
 }
 
-document.addEventListener('DOMContentLoaded', bindVersionManager)
+document.addEventListener('DOMContentLoaded', async () => {
+    bindVersionManager()
+    await restoreSelectedInstance()
+})
 
 window.EvoVanillaManager = {
     getVersionManifest,
