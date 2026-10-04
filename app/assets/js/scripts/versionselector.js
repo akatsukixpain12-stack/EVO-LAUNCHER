@@ -131,11 +131,11 @@ async function updateVersionInfo(version) {
  * Show Java configuration dialog
  * @param {string} versionId Version ID
  */
-function showJavaConfig(versionId) {
+async function showJavaConfig(versionId) {
     const version = versionCache.find(v => v.id === versionId)
     if (!version) return
     
-    const recommendation = DistroIntegration.getJavaRecommendation(versionId)
+    const recommendation = await DistroIntegration.getJavaRecommendation(versionId)
     
     const dialog = document.createElement('div')
     dialog.className = 'modal java-config-modal'
