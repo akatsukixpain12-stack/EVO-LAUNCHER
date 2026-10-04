@@ -102,6 +102,17 @@ function setLaunchEnabled(val){
 document.getElementById('launch_button').addEventListener('click', async e => {
     loggerLanding.info('Launching game..')
     try {
+        // Standalone EVO instances use the real Mojang/Fabric installer instead
+        // of pretending that a distro server is a Minecraft version catalog.
+        if(window.EvoVanillaManager && ConfigManager.getSelectedVanillaVersion()){
+            setLaunchDetails('Preparing selected Minecraft instance…')
+            toggleLaunchArea(true)
+            setLaunchPercentage(0)
+            await window.EvoVanillaManager.launchSelected()
+            toggleLaunchArea(false)
+            return
+        }
+
         const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
         const jExe = ConfigManager.getJavaExecutable(ConfigManager.getSelectedServer())
         if(jExe == null){
@@ -134,21 +145,21 @@ document.getElementById('settingsMediaButton').onclick = async e => {
 }
 
 // Dashboard shortcuts reuse the established launcher actions.
-document.querySelector('.evo-settings-link').onclick = () => {
+document.querySelector('.evo-settings-link')?.addEventListener('click', () => {
     document.getElementById('settingsMediaButton').click()
-}
-document.getElementById('evoNavServers').onclick = () => {
+})
+document.getElementById('evoNavServers')?.addEventListener('click', () => {
     document.getElementById('server_selection_button').click()
-}
-document.getElementById('evoQuickServers').onclick = () => {
+})
+document.getElementById('evoQuickServers')?.addEventListener('click', () => {
     document.getElementById('server_selection_button').click()
-}
-document.getElementById('evoQuickMods').onclick = () => {
+})
+document.getElementById('evoQuickMods')?.addEventListener('click', () => {
     document.getElementById('settingsMediaButton').click()
-}
-document.getElementById('evoQuickOptimize').onclick = () => {
+})
+document.getElementById('evoQuickOptimize')?.addEventListener('click', () => {
     document.getElementById('settingsMediaButton').click()
-}
+})
 
 // Bind avatar overlay button.
 document.getElementById('avatarOverlay').onclick = async e => {
@@ -179,6 +190,7 @@ function updateSelectedServer(serv){
         fullSettingsSave()
     }
     ConfigManager.setSelectedServer(serv != null ? serv.rawServer.id : null)
+    ConfigManager.setSelectedVanillaVersion(null)
     ConfigManager.save()
     server_selection_button.innerHTML = '&#8226; ' + (serv != null ? serv.rawServer.name : Lang.queryJS('landing.noSelection'))
     if(getCurrentView() === VIEWS.settings){
