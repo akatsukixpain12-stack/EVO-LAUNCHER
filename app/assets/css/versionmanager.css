@@ -1,0 +1,140 @@
+/* EVO Version Manager — real installer UI */
+.evo-version-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 7, 17, .78);
+    backdrop-filter: blur(12px);
+}
+.evo-version-dialog {
+    width: min(820px, calc(100vw - 70px));
+    max-height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(126, 190, 255, .18);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(14, 26, 52, .98), rgba(8, 15, 31, .98));
+    box-shadow: 0 30px 100px rgba(0,0,0,.55);
+}
+.evo-version-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 26px 28px 20px;
+    border-bottom: 1px solid rgba(164, 193, 236, .10);
+}
+.evo-version-kicker {
+    color: #70dcff;
+    font: 9px 'Avenir Heavy';
+    letter-spacing: 2px;
+}
+.evo-version-header h2 {
+    margin: 7px 0 4px;
+    color: #fff;
+    font: 26px 'Avenir Heavy';
+}
+.evo-version-header p {
+    color: rgba(207, 220, 244, .55);
+    font: 11px 'Avenir Book';
+}
+.evo-version-close {
+    width: 35px;
+    height: 35px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 10px;
+    background: rgba(255,255,255,.05);
+    color: rgba(255,255,255,.7);
+    font: 24px 'Avenir Book';
+    cursor: pointer;
+}
+.evo-version-toolbar {
+    display: flex;
+    gap: 10px;
+    padding: 15px 20px 10px;
+}
+.evo-version-toolbar input,
+.evo-version-toolbar select {
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid rgba(155, 188, 236, .14);
+    border-radius: 10px;
+    outline: none;
+    background: rgba(4, 10, 23, .65);
+    color: #fff;
+    font: 11px 'Avenir Book';
+}
+.evo-version-toolbar input {
+    flex: 1;
+    padding: 0 13px;
+}
+.evo-version-toolbar select {
+    width: 135px;
+    padding: 0 10px;
+}
+.evo-version-status {
+    min-height: 17px;
+    padding: 0 20px 10px;
+    color: rgba(195, 215, 244, .55);
+    font: 9px 'Avenir Book';
+}
+.evo-version-list {
+    overflow: auto;
+    padding: 0 20px 20px;
+}
+.evo-version-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 8px;
+    padding: 13px 14px;
+    border: 1px solid rgba(155, 188, 236, .10);
+    border-radius: 12px;
+    background: rgba(17, 32, 62, .55);
+    transition: .16s ease;
+}
+.evo-version-row:hover {
+    border-color: rgba(112, 220, 255, .32);
+    background: rgba(30, 55, 100, .62);
+    transform: translateY(-1px);
+}
+.evo-version-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.evo-version-copy strong {
+    color: #fff;
+    font: 13px 'Avenir Heavy';
+}
+.evo-version-copy span {
+    color: rgba(194, 213, 242, .48);
+    font: 9px 'Avenir Book';
+}
+.evo-version-install {
+    min-width: 90px;
+    padding: 9px 13px;
+    border: 1px solid rgba(112, 220, 255, .22);
+    border-radius: 9px;
+    background: linear-gradient(135deg, rgba(78,199,238,.85), rgba(83,110,228,.85));
+    color: #fff;
+    font: 10px 'Avenir Heavy';
+    cursor: pointer;
+}
+.evo-version-install:hover {
+    filter: brightness(1.12);
+}
+.evo-version-install:disabled {
+    opacity: .55;
+    cursor: wait;
+}
+.evo-version-loading {
+    padding: 45px 10px;
+    text-align: center;
+    color: rgba(207, 220, 244, .55);
+    font: 11px 'Avenir Book';
+}
