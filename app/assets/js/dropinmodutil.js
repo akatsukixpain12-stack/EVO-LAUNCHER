@@ -79,12 +79,20 @@ exports.addDropinMods = function(files, modsdir) {
 
     exports.validateDir(modsdir)
 
+    let added = 0
     for(let f of files) {
-        if(MOD_REGEX.exec(f.name) != null) {
-            fs.moveSync(f.path, path.join(modsdir, f.name))
-        }
-    }
+        if(!f || !f.name || !f.path) continue
+        if(MOD_REGEX.exec(f.name) == null) continue
 
+        // FileList paths can point to Downloads, another drive, or a mounted
+        // location. Copy instead of move so a failed filesystem operation does
+        // not destroy the user's original mod.
+        const fileName = path.basename(f.name)
+        const destination = path.join(modsdir, fileName)
+        fs.copyFileSync(f.path, destination)
+        added++
+    }
+    return added
 }
 
 /**
@@ -96,7 +104,14 @@ exports.addDropinMods = function(files, modsdir) {
  */
 exports.writeDropinMod = function(buffer, fileName, modsDir) {
     exports.validateDir(modsDir)
-    fs.writeFileSync(path.join(modsDir, fileName), buffer)
+
+    const safeName = path.basename(String(fileName || ''))
+    if(!safeName || MOD_REGEX.exec(safeName) == null) {
+        throw new Error('Invalid Minecraft mod filename.')
+    }
+
+    fs.writeFileSync(path.join(modsDir, safeName), buffer)
+    return safeName
 }
 
 /**
