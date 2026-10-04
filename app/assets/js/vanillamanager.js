@@ -394,10 +394,22 @@ async function launchProfile(profile) {
     ConfigManager.setJavaExecutable(profile.id, java.path)
     ConfigManager.save()
 
+    // Vanilla uses Mojang's manifest as the base manifest. Do not pass its
+    // game arguments a second time as loader arguments.
+    const modManifest = profile.loader === 'vanilla'
+        ? {
+            ...profile.manifest,
+            id: profile.manifest.id,
+            mainClass: profile.manifest.mainClass,
+            minecraftArguments: profile.manifest.minecraftArguments,
+            arguments: { jvm: [], game: [] }
+        }
+        : profile.modManifest
+
     const builder = new ProcessBuilder(
         createStandaloneServer(profile),
         profile.manifest,
-        profile.modManifest,
+        modManifest,
         authUser,
         '2.2.1'
     )
@@ -426,6 +438,18 @@ async function loadInstalledProfile(id) {
         manifest: await getVersion(mcVersion),
         modManifest: profile
     }
+}
+
+
+async function launchSelected() {
+    const id = resolveSelectedProfile()
+    if(!id) throw new Error('No standalone EVO instance is selected.')
+
+    if(!selectedProfile || selectedProfile.id !== id) {
+        selectedProfile = await loadInstalledProfile(id)
+    }
+
+    return launchProfile(selectedProfile)
 }
 
 function resolveSelectedProfile() {
@@ -581,6 +605,7 @@ window.EvoVanillaManager = {
     installVanillaProfile,
     loadInstalledProfile,
     launchProfile,
+    launchSelected,
     updateLandingLabel,
     openVersionManager,
     resolveSelectedProfile
