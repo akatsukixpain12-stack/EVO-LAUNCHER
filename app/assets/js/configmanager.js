@@ -96,6 +96,7 @@ const DEFAULT_CONFIG = {
     },
     clientToken: null,
     selectedServer: null, // Resolved
+    selectedVanillaVersion: null, // Resolved EVO standalone instance
     selectedAccount: null,
     authenticationDatabase: {},
     modConfigurations: [],
@@ -303,6 +304,22 @@ exports.getSelectedServer = function(def = false){
  */
 exports.setSelectedServer = function(serverID){
     config.selectedServer = serverID
+}
+
+/**
+ * Get the selected standalone Minecraft instance installed by EVO.
+ * @returns {string|null} The installed instance id.
+ */
+exports.getSelectedVanillaVersion = function(){
+    return config.selectedVanillaVersion || null
+}
+
+/**
+ * Set the selected standalone Minecraft instance.
+ * @param {string|null} instanceId The instance id, or null to use a distro server.
+ */
+exports.setSelectedVanillaVersion = function(instanceId){
+    config.selectedVanillaVersion = instanceId || null
 }
 
 /**
