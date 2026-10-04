@@ -51,6 +51,7 @@
                 </div>
                 <div class="evo-quick-row">
                     <span class="evo-section-label">QUICK ACCESS</span>
+                    <button type="button" class="evo-quick-card" id="evoQuickVersions"><span>◈</span><b>Versions</b><small>Install any Minecraft version</small><i>›</i></button>
                     <button type="button" class="evo-quick-card" id="evoQuickMods"><span>▣</span><b>Mod manager</b><small>Manage your loadout</small><i>›</i></button>
                     <button type="button" class="evo-quick-card" id="evoQuickOptimize"><span>✦</span><b>Optimize</b><small>Boost your performance</small><i>›</i></button>
                     <button type="button" class="evo-quick-card" id="evoQuickServers"><span>◉</span><b>Servers</b><small>Find your next adventure</small><i>›</i></button>
@@ -266,5 +267,27 @@
             </div>
         </div>
     </div>
-    <script src="./assets/js/scripts/landing.js"></script>
+    <div id="evoVersionManager" class="evo-version-modal" style="display:none;">
+    <div class="evo-version-dialog">
+        <div class="evo-version-header">
+            <div>
+                <span class="evo-version-kicker">INSTANCE MANAGER</span>
+                <h2>Minecraft Versions</h2>
+                <p>Live Mojang catalog — install vanilla or Fabric profiles.</p>
+            </div>
+            <button id="evoVersionClose" class="evo-version-close" type="button">×</button>
+        </div>
+        <div class="evo-version-toolbar">
+            <input id="evoVersionSearch" type="search" placeholder="Search 1.21.1, 1.20.1, snapshots…">
+            <select id="evoLoaderChoice">
+                <option value="vanilla">Vanilla</option>
+                <option value="fabric">Fabric</option>
+            </select>
+        </div>
+        <div id="evoVersionStatus" class="evo-version-status">Choose a version to install.</div>
+        <div id="evoVersionList" class="evo-version-list"></div>
+    </div>
+</div>
+<script src="./assets/js/vanillamanager.js"></script>
+<script src="./assets/js/scripts/landing.js"></script>
 </div>
