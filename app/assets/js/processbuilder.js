@@ -425,6 +425,10 @@ class ProcessBuilder {
 
         if(Array.isArray(modArguments.jvm)) {
             for(const argStr of modArguments.jvm) {
+                if(typeof argStr !== 'string'){
+                    args.push(argStr)
+                    continue
+                }
                 args.push(argStr
                     .replaceAll('${library_directory}', this.libPath)
                     .replaceAll('${classpath_separator}', ProcessBuilder.getClasspathSeparator())
