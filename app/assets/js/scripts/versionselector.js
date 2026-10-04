@@ -13,8 +13,8 @@ let versionCache = null
 /**
  * Initialize version selector UI
  */
-function initVersionSelector() {
-    const versions = DistroIntegration.getAvailableVersions()
+async function initVersionSelector() {
+    const versions = await DistroIntegration.getAvailableVersions()
     versionCache = versions
     
     renderVersionList(versions)
@@ -94,7 +94,7 @@ function selectVersion(versionId) {
     document.querySelector(`[data-version-id="${versionId}"]`)?.classList.add('selected')
     
     // Update info panel
-    updateVersionInfo(version)
+    updateVersionInfo(version).catch(console.error)
     console.log(`Selected version: ${version.name}`)
 }
 
@@ -102,11 +102,11 @@ function selectVersion(versionId) {
  * Update version information display
  * @param {Object} version Version object
  */
-function updateVersionInfo(version) {
+async function updateVersionInfo(version) {
     const infoPanel = document.getElementById('version-info-panel')
     if (!infoPanel) return
     
-    const recommendation = DistroIntegration.getJavaRecommendation(version.id)
+    const recommendation = await DistroIntegration.getJavaRecommendation(version.id)
     
     infoPanel.innerHTML = `
         <div class="info-header">
