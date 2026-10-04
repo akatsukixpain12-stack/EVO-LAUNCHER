@@ -428,6 +428,10 @@ async function loadInstalledProfile(id) {
     }
 }
 
+function resolveSelectedProfile() {
+    return ConfigManager.getSelectedVanillaVersion() || null
+}
+
 function updateLandingLabel(profile) {
     const button = document.getElementById('server_selection_button')
     const instanceName = document.getElementById('evoInstanceName')
@@ -579,5 +583,5 @@ window.EvoVanillaManager = {
     launchProfile,
     updateLandingLabel,
     openVersionManager,
-    resolveSelectedProfile: () => ConfigManager.getSelectedVanillaVersion()
+    resolveSelectedProfile
 }
