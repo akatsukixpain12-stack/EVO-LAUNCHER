@@ -1048,7 +1048,7 @@ async function importFromModrinth(){
         if(!Array.isArray(versions) || versions.length === 0){
             const fallbackParams = new URLSearchParams({
                 loaders: JSON.stringify([loader]),
-                game_versions: JSON.stringify([serv.rawServer.minecraftVersion]),
+                game_versions: JSON.stringify([gameVersion]),
                 include_changelog: 'false'
             })
             res = await fetch(`https://api.modrinth.com/v2/project/${encodeURIComponent(slug)}/version?${fallbackParams.toString()}`)
@@ -1072,7 +1072,7 @@ async function importFromModrinth(){
         if(!file?.url || !file?.filename){
             showDropinImportMessage(
                 Lang.queryJS('settings.dropinMods.modrinthNoMatchTitle'),
-                Lang.queryJS('settings.dropinMods.modrinthNoMatchMessage', { gameVersion: serv.rawServer.minecraftVersion, loader })
+                Lang.queryJS('settings.dropinMods.modrinthNoMatchMessage', { gameVersion, loader })
             )
             return
         }
@@ -1093,6 +1093,17 @@ async function importFromModrinth(){
 }
 
 async function importFromDirectUrl(){
+    if(ConfigManager.getSelectedVanillaVersion()){
+        const profile = await window.EvoVanillaManager.loadInstalledProfile(ConfigManager.getSelectedVanillaVersion())
+        if(profile.loader === 'vanilla'){
+            showDropinImportMessage(
+                'Fabric required for mods',
+                'This instance is vanilla. Reinstall this version with Fabric in EVO Version Manager before importing mods.'
+            )
+            return
+        }
+    }
+
     const input = window.prompt(Lang.queryJS('settings.dropinMods.curseForgePrompt'))
     if(input == null || !input.trim()){
         return
@@ -1138,7 +1149,7 @@ async function resolveDropinModsForUI(){
 
     let dropinMods = ''
 
-    for(dropin of CACHE_DROPIN_MODS){
+    for(const dropin of CACHE_DROPIN_MODS){
         dropinMods += `<div id="${dropin.fullName}" class="settingsBaseMod settingsDropinMod" ${!dropin.disabled ? 'enabled' : ''}>
                     <div class="settingsModContent">
                         <div class="settingsModMainWrapper">
