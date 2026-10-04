@@ -30,7 +30,7 @@ async function validateLaunchSetup(serverId) {
         
         if (!javaExe) {
             logger.warn(`No Java configured for ${serverId}, attempting auto-setup...`)
-            const autoSetup = DistroIntegration.autoSetupJavaForAllServers()
+            const autoSetup = await DistroIntegration.autoSetupJavaForAllServers()
             if (autoSetup[serverId]?.success) {
                 javaExe = ConfigManager.getJavaExecutable(serverId)
                 result.warnings.push('Java was automatically configured')
