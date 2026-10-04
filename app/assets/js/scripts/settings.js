@@ -775,13 +775,27 @@ const settingsModsContainer = document.getElementById('settingsModsContainer')
  * Resolve and update the mods on the UI.
  */
 async function resolveModsForUI(){
-    const serv = ConfigManager.getSelectedServer()
+    // Standalone EVO instances manage mods as ordinary files in the
+    // instance/mods directory. The distribution mod toggles do not apply.
+    if(ConfigManager.getSelectedVanillaVersion()){
+        document.getElementById('settingsReqModsContent').innerHTML = ''
+        document.getElementById('settingsOptModsContent').innerHTML =
+            '<div class="settingsBaseMod settingsDropinMod" enabled><div class="settingsModContent"><div class="settingsModDetails"><span class="settingsModName">Fabric instance mods</span><span class="settingsModVersion">Drop .jar files below or import from Modrinth.</span></div></div></div>'
+        return
+    }
 
+    const serv = ConfigManager.getSelectedServer()
     const distro = await DistroAPI.getDistribution()
+    const server = distro.getServerById(serv)
     const servConf = ConfigManager.getModConfiguration(serv)
 
-    const modStr = parseModulesForUI(distro.getServerById(serv).modules, false, servConf.mods)
+    if(!server || !servConf){
+        document.getElementById('settingsReqModsContent').innerHTML = ''
+        document.getElementById('settingsOptModsContent').innerHTML = ''
+        return
+    }
 
+    const modStr = parseModulesForUI(server.modules, false, servConf.mods)
     document.getElementById('settingsReqModsContent').innerHTML = modStr.reqMods
     document.getElementById('settingsOptModsContent').innerHTML = modStr.optMods
 }
@@ -880,6 +894,8 @@ function bindModsToggleSwitch(){
  * Save the mod configuration based on the UI values.
  */
 function saveModConfiguration(){
+    if(ConfigManager.getSelectedVanillaVersion()) return
+
     const serv = ConfigManager.getSelectedServer()
     const modConf = ConfigManager.getModConfiguration(serv)
     modConf.mods = _saveModConfiguration(modConf.mods)
@@ -979,18 +995,47 @@ function showDropinImportMessage(title, desc){
     toggleOverlay(true)
 }
 
+async function getActiveModTarget(){
+    const standaloneId = ConfigManager.getSelectedVanillaVersion()
+    if(standaloneId){
+        if(!window.EvoVanillaManager){
+            throw new Error('EVO Version Manager is not loaded.')
+        }
+        const profile = await window.EvoVanillaManager.loadInstalledProfile(standaloneId)
+        return {
+            minecraftVersion: profile.version,
+            loader: profile.loader
+        }
+    }
+
+    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+    return {
+        minecraftVersion: serv.rawServer.minecraftVersion,
+        loader: getServerLoader(serv)
+    }
+}
+
 async function importFromModrinth(){
     const input = window.prompt(Lang.queryJS('settings.dropinMods.modrinthPrompt'))
     if(input == null || !input.trim()){
         return
     }
 
-    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-    const loader = getServerLoader(serv)
+    const target = await getActiveModTarget()
+    if(target.loader === 'vanilla'){
+        showDropinImportMessage(
+            'Fabric required for mods',
+            'This instance is vanilla. Reinstall this Minecraft version with the Fabric loader in EVO Version Manager, then import mods.'
+        )
+        return
+    }
+
+    const loader = target.loader
+    const gameVersion = target.minecraftVersion
     const slug = parseModrinthProjectSlug(input)
     const params = new URLSearchParams({
         loaders: JSON.stringify([loader]),
-        game_versions: JSON.stringify([serv.rawServer.minecraftVersion]),
+        game_versions: JSON.stringify([gameVersion]),
         featured: 'true',
         include_changelog: 'false'
     })
@@ -1014,7 +1059,7 @@ async function importFromModrinth(){
         if(!Array.isArray(versions) || versions.length === 0){
             showDropinImportMessage(
                 Lang.queryJS('settings.dropinMods.modrinthNoMatchTitle'),
-                Lang.queryJS('settings.dropinMods.modrinthNoMatchMessage', { gameVersion: serv.rawServer.minecraftVersion, loader })
+                Lang.queryJS('settings.dropinMods.modrinthNoMatchMessage', { gameVersion, loader })
             )
             return
         }
@@ -1079,9 +1124,17 @@ async function importFromDirectUrl(){
  * populate the results onto the UI.
  */
 async function resolveDropinModsForUI(){
-    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-    CACHE_SETTINGS_MODS_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'mods')
-    CACHE_DROPIN_MODS = DropinModUtil.scanForDropinMods(CACHE_SETTINGS_MODS_DIR, serv.rawServer.minecraftVersion)
+    const standaloneId = ConfigManager.getSelectedVanillaVersion()
+
+    if(standaloneId){
+        const profile = await window.EvoVanillaManager.loadInstalledProfile(standaloneId)
+        CACHE_SETTINGS_MODS_DIR = path.join(ConfigManager.getInstanceDirectory(), standaloneId, 'mods')
+        CACHE_DROPIN_MODS = DropinModUtil.scanForDropinMods(CACHE_SETTINGS_MODS_DIR, profile.version)
+    } else {
+        const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+        CACHE_SETTINGS_MODS_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id, 'mods')
+        CACHE_DROPIN_MODS = DropinModUtil.scanForDropinMods(CACHE_SETTINGS_MODS_DIR, serv.rawServer.minecraftVersion)
+    }
 
     let dropinMods = ''
 
@@ -1171,7 +1224,7 @@ function bindDropinModFileSystemButton(){
  * of adding/removing the .disabled extension.
  */
 function saveDropinModConfiguration(){
-    for(dropin of CACHE_DROPIN_MODS){
+    for(const dropin of (CACHE_DROPIN_MODS || [])){
         const dropinUI = document.getElementById(dropin.fullName)
         if(dropinUI != null){
             const dropinUIEnabled = dropinUI.hasAttribute('enabled')
@@ -1221,9 +1274,15 @@ let CACHE_SELECTED_SHADERPACK
  * Load shaderpack information.
  */
 async function resolveShaderpacksForUI(){
-    const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
-    CACHE_SETTINGS_INSTANCE_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id)
-    CACHE_SHADERPACKS = DropinModUtil.scanForShaderpacks(CACHE_SETTINGS_INSTANCE_DIR)
+    const standaloneId = ConfigManager.getSelectedVanillaVersion()
+    if(standaloneId){
+        CACHE_SETTINGS_INSTANCE_DIR = path.join(ConfigManager.getInstanceDirectory(), standaloneId)
+        CACHE_SHADERPACKS = DropinModUtil.scanForShaderpacks(CACHE_SETTINGS_INSTANCE_DIR)
+    } else {
+        const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
+        CACHE_SETTINGS_INSTANCE_DIR = path.join(ConfigManager.getInstanceDirectory(), serv.rawServer.id)
+        CACHE_SHADERPACKS = DropinModUtil.scanForShaderpacks(CACHE_SETTINGS_INSTANCE_DIR)
+    }
     CACHE_SELECTED_SHADERPACK = DropinModUtil.getEnabledShaderpack(CACHE_SETTINGS_INSTANCE_DIR)
 
     setShadersOptions(CACHE_SHADERPACKS, CACHE_SELECTED_SHADERPACK)
@@ -1297,6 +1356,25 @@ function bindShaderpackButton() {
  * Load the currently selected server information onto the mods tab.
  */
 async function loadSelectedServerOnModsTab(){
+    const standaloneId = ConfigManager.getSelectedVanillaVersion()
+
+    if(standaloneId){
+        const profile = await window.EvoVanillaManager.loadInstalledProfile(standaloneId)
+        for(const el of document.getElementsByClassName('settingsSelServContent')) {
+            el.innerHTML = `
+                <div class="serverListingDetails">
+                    <span class="serverListingName">${profile.loader === 'fabric' ? 'Fabric ' : 'Minecraft '}${profile.version}</span>
+                    <span class="serverListingDescription">Standalone EVO instance</span>
+                    <div class="serverListingInfo">
+                        <div class="serverListingVersion">${profile.version}</div>
+                        <div class="serverListingRevision">${profile.loader}</div>
+                    </div>
+                </div>
+            `
+        }
+        return
+    }
+
     const serv = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())
 
     for(const el of document.getElementsByClassName('settingsSelServContent')) {
