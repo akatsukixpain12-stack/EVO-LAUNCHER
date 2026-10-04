@@ -413,18 +413,24 @@ class ProcessBuilder {
 
         const argDiscovery = /\${*(.*)}/
 
-        // JVM Arguments First
-        let args = this.vanillaManifest.arguments.jvm
+        // Never mutate the cached Mojang/Fabric manifest. The previous code
+        // reused the same arguments array and appended loader arguments on
+        // every launch, which could make the second launch crash.
+        const vanillaArguments = this.vanillaManifest.arguments || { jvm: [], game: [] }
+        const modArguments = this.modManifest.arguments || { jvm: [], game: [] }
+        let args = Array.isArray(vanillaArguments.jvm) ? [...vanillaArguments.jvm] : []
 
         // Debug securejarhandler
         // args.push('-Dbsl.debug=true')
 
-        if(this.modManifest.arguments.jvm != null) {
-            for(const argStr of this.modManifest.arguments.jvm) {
+        if(Array.isArray(modArguments.jvm)) {
+            for(const argStr of modArguments.jvm) {
                 args.push(argStr
                     .replaceAll('${library_directory}', this.libPath)
                     .replaceAll('${classpath_separator}', ProcessBuilder.getClasspathSeparator())
                     .replaceAll('${version_name}', this.modManifest.id)
+                    .replaceAll('${path}', this.vanillaManifest.__evoLogPath || path.join(this.gameDir, 'logs', 'latest.log'))
+                    .replaceAll('${log_path}', this.vanillaManifest.__evoLogPath || path.join(this.gameDir, 'logs', 'latest.log'))
                 )
             }
         }
@@ -447,7 +453,7 @@ class ProcessBuilder {
         args.push(this.modManifest.mainClass)
 
         // Vanilla Arguments
-        args = args.concat(this.vanillaManifest.arguments.game)
+        args = args.concat(Array.isArray(vanillaArguments.game) ? vanillaArguments.game : [])
 
         for(let i=0; i<args.length; i++){
             if(typeof args[i] === 'object' && args[i].rules != null){
@@ -556,6 +562,12 @@ class ProcessBuilder {
                         case 'launcher_version':
                             val = args[i].replace(argDiscovery, this.launcherVersion)
                             break
+                        case 'log_path':
+                            val = this.vanillaManifest.__evoLogPath || path.join(this.gameDir, 'logs', 'latest.log')
+                            break
+                        case 'path':
+                            val = this.vanillaManifest.__evoLogPath || path.join(this.gameDir, 'logs', 'latest.log')
+                            break
                         case 'classpath':
                             val = this.classpathArg(mods, tempNativePath).join(ProcessBuilder.getClasspathSeparator())
                             break
@@ -571,8 +583,10 @@ class ProcessBuilder {
         this._processAutoConnectArg(args)
         
 
-        // Forge Specific Arguments
-        args = args.concat(this.modManifest.arguments.game)
+        // Forge/Fabric loader-specific arguments.
+        if(Array.isArray(modArguments.game)) {
+            args = args.concat(modArguments.game)
+        }
 
         // Filter null values
         args = args.filter(arg => {
